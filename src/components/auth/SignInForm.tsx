@@ -13,31 +13,40 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-// Show error message
-// Show validation message ( valite existence validate email )
-// Should not allow user to login without email verified
-// Empty Email or Password should throw different error
-
 export const SignInForm = () => {
   const auth = getAuth(firebase);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const signInHandler = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        if (user.emailVerified) {
-          navigate("/");
-        } else {
-          //   setMessage("User's email need to be verified before login in");
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-        console.log("error", error.message);
-      });
+    if (email && password) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          if (user.emailVerified) {
+            navigate("/");
+          } else {
+            setError("User's email need to be verified before login in");
+          }
+        })
+        .catch((error) => {
+          if (error.message.includes("wrong-password")) {
+            setError("Email or Password is not correct");
+          }
+          console.log("error", error);
+          console.log("error", error.message);
+        });
+    } else {
+      if (!email && !password) {
+        setError("Email and Password are required");
+      } else if (!password) {
+        setError("Password is required");
+      } else {
+        setError("Email is required");
+      }
+    }
   };
 
   return (
@@ -51,7 +60,7 @@ export const SignInForm = () => {
       <Heading size="3xl" mb="3rem">
         Login
       </Heading>
-      <FormControl isInvalid={true}>
+      <FormControl isInvalid={error ? true : false}>
         <FormLabel>Email</FormLabel>
         <Input
           type="email"
@@ -64,11 +73,7 @@ export const SignInForm = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <FormErrorMessage>Email and Password is required</FormErrorMessage>
-        <FormErrorMessage>Email or password is not correct</FormErrorMessage>
-        <FormErrorMessage>
-          Email must be verified before login in
-        </FormErrorMessage>
+        {error && <FormErrorMessage>{error}</FormErrorMessage>}
         <Box mt="1.5rem">
           <Button
             onClick={() => signInHandler()}
