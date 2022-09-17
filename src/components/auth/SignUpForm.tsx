@@ -10,34 +10,34 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 
-export const SignInForm = ({
+export const SignUpForm = ({
   changeFormState,
 }: {
   changeFormState: (formState: string) => void;
 }) => {
   const auth = getAuth(firebase);
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const signInHandler = () => {
+  const signUpHandler = () => {
     if (email && password) {
-      signInWithEmailAndPassword(auth, email, password)
+      createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          if (user.emailVerified) {
-            navigate("/");
-          } else {
-            setError("User's email need to be verified before login in");
-          }
+          sendEmailVerification(user);
+          // supposed to have a toast to inform this
+          setError("Please verify the user's email before login");
         })
         .catch((error) => {
-          if (error.message.includes("wrong-password")) {
-            setError("Email or Password is not correct");
+          if (error.message.includes("email-already-in-use")) {
+            setError("Email is already in use");
           }
         });
     } else {
@@ -60,7 +60,7 @@ export const SignInForm = ({
       height="100%"
     >
       <Heading size="3xl" mb="3rem">
-        Login.
+        Sign Up.
       </Heading>
       <FormControl isInvalid={error ? true : false}>
         <FormLabel>Email</FormLabel>
@@ -78,7 +78,7 @@ export const SignInForm = ({
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
         <Box mt="1.5rem">
           <Button
-            onClick={() => signInHandler()}
+            onClick={() => signUpHandler()}
             bg="#2c2e2d"
             color="white"
             _hover={{
@@ -86,10 +86,10 @@ export const SignInForm = ({
               color: "white",
             }}
           >
-            Sign In
+            Sign Up
           </Button>
           <Button
-            onClick={() => changeFormState("signup")}
+            onClick={() => changeFormState("signin")}
             ml="1rem"
             bg="#2c2e2d"
             color="white"
@@ -98,7 +98,7 @@ export const SignInForm = ({
               color: "white",
             }}
           >
-            Create An Account
+            Already have an account ?
           </Button>
         </Box>
       </FormControl>
