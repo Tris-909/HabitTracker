@@ -16,6 +16,7 @@ import {
 } from "firebase/auth";
 import { MEDIA_QUERY } from "consts";
 import { GroupButtons } from "./GroupButtons";
+import { notify } from "components";
 
 export const SignUpForm = ({
   changeFormState,
@@ -36,8 +37,9 @@ export const SignUpForm = ({
         .then((userCredential) => {
           const user = userCredential.user;
           sendEmailVerification(user);
-          // supposed to have a toast to inform this
-          setError("Please verify the user's email before login");
+          notify({
+            notifyMessage: "Please verify the user's email before login",
+          });
         })
         .catch((error) => {
           if (error.message.includes("email-already-in-use")) {
