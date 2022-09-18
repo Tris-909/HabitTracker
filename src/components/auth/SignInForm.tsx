@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { MEDIA_QUERY } from "consts";
 
 export const SignInForm = ({
   changeFormState,
@@ -24,7 +25,8 @@ export const SignInForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isDesktop] = useMediaQuery("(min-width: 1280px)");
+  const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`);
+  const [isMobile] = useMediaQuery(`(max-width: ${MEDIA_QUERY.MOBILE})`);
 
   const signInHandler = () => {
     if (email && password) {
@@ -66,7 +68,7 @@ export const SignInForm = ({
           Habit Tracker
         </Heading>
       )}
-      <Heading size="3xl" mb="3rem">
+      <Heading size="3xl" mb="2rem">
         Login.
       </Heading>
       <FormControl isInvalid={error ? true : false}>
@@ -83,11 +85,12 @@ export const SignInForm = ({
           onChange={(event) => setPassword(event.target.value)}
         />
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
-        <Box mt="1.5rem">
+        <Box mt="1.5rem" display={"flex"} flexDir={isMobile ? "column" : "row"}>
           <Button
             onClick={() => signInHandler()}
             bg="#2c2e2d"
             color="white"
+            mb={isMobile ? "1rem" : "0rem"}
             _hover={{
               bg: "#2c2e2d",
               color: "white",
@@ -97,7 +100,7 @@ export const SignInForm = ({
           </Button>
           <Button
             onClick={() => changeFormState("signup")}
-            ml="1rem"
+            ml={isMobile ? "0rem" : "1rem"}
             bg="#2c2e2d"
             color="white"
             _hover={{
