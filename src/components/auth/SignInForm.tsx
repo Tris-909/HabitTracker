@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   Flex,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -23,6 +24,7 @@ export const SignInForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isDesktop] = useMediaQuery("(min-width: 1280px)");
 
   const signInHandler = () => {
     if (email && password) {
@@ -59,6 +61,11 @@ export const SignInForm = ({
       p="1rem"
       height="100%"
     >
+      {!isDesktop && (
+        <Heading size="4xl" mb="5rem">
+          Habit Tracker
+        </Heading>
+      )}
       <Heading size="3xl" mb="3rem">
         Login.
       </Heading>
