@@ -1,5 +1,6 @@
 import { Box, Button, useMediaQuery } from "@chakra-ui/react";
 import { MEDIA_QUERY } from "consts";
+import { colors } from "consts";
 
 type GroupButtonsProps = {
   actionHandler: () => void;
@@ -20,11 +21,11 @@ export const GroupButtons = ({
     <Box mt="1.5rem" display={"flex"} flexDir={isMobile ? "column" : "row"}>
       <Button
         onClick={() => actionHandler()}
-        bg="#2c2e2d"
+        bg={`${colors.black}`}
         color="white"
         mb={isMobile ? "1rem" : "0rem"}
         _hover={{
-          bg: "#2c2e2d",
+          bg: `${colors.black}`,
           color: "white",
         }}
       >
@@ -33,10 +34,10 @@ export const GroupButtons = ({
       <Button
         onClick={() => changeFormHandler()}
         ml={isMobile ? "0rem" : "1rem"}
-        bg="#2c2e2d"
+        bg={`${colors.black}`}
         color="white"
         _hover={{
-          bg: "#2c2e2d",
+          bg: `${colors.black}`,
           color: "white",
         }}
       >
