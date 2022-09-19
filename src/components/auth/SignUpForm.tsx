@@ -31,10 +31,10 @@ export const SignUpForm = ({
     ssr: false,
   });
 
-  const signUpHandler = () => {
+  const signUpHandler = async () => {
     if (email && password) {
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
           sendEmailVerification(user);
           notify({
