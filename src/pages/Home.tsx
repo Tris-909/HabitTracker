@@ -1,31 +1,46 @@
 import { useEffect } from "react";
-import { db } from "initialization/firebase";
+import { db, useAuthState } from "initialization/firebase";
 import { getAuth, signOut } from "firebase/auth";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  serverTimestamp,
+  documentId,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 
 export const HomePage = () => {
   const auth = getAuth();
+  const { user } = useAuthState();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   initializeUser();
-  // }, []);
+  useEffect(() => {
+    initializeUser(user?.email);
+  }, [user?.email]);
 
-  // const initializeUser = async () => {
-  //   const getUserQuery = doc(db, "users", email);
-  //   const user = await getDoc(getUserQuery);
-  //   console.log("user", user);
+  const initializeUser = async (email: string) => {
+    if (email) {
+      const queries = query(
+        collection(db, "users"),
+        where("email", "==", email)
+      );
+      const { docs } = await getDocs(queries);
+      const currentUser = docs[0]?.data();
 
-  //   if (user.exists()) {
-  //     const createdUser = await setDoc(doc(db, "users", "email"), {
-  //       email: email,
-  //       createdAt: serverTimestamp(),
-  //     });
-  //     console.log("createdUser", createdUser);
-  //   }
-  // };
+      if (!currentUser) {
+        addDoc(collection(db, "users"), {
+          email: email,
+          createdAt: serverTimestamp(),
+        });
+      }
+    }
+  };
 
   const signOutHandler = () => {
     signOut(auth)
