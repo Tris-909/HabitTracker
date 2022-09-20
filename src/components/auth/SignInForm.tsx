@@ -10,7 +10,12 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 import { MEDIA_QUERY } from "consts";
 import { GroupButtons } from "./GroupButtons";
 
@@ -30,20 +35,22 @@ export const SignInForm = ({
 
   const signInHandler = () => {
     if (email && password) {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          if (user.emailVerified) {
-            navigate("/");
-          } else {
-            setError("User's email need to be verified before login in");
-          }
-        })
-        .catch((error) => {
-          if (error.message.includes("wrong-password")) {
-            setError("Email or Password is not correct");
-          }
-        });
+      setPersistence(auth, browserSessionPersistence).then(() => {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            if (user.emailVerified) {
+              navigate("/");
+            } else {
+              setError("User's email need to be verified before login in");
+            }
+          })
+          .catch((error) => {
+            if (error.message.includes("wrong-password")) {
+              setError("Email or Password is not correct");
+            }
+          });
+      });
     } else {
       if (!email && !password) {
         setError("Email and Password are required");

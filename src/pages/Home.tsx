@@ -8,7 +8,6 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 export const HomePage = () => {
   const auth = getAuth();
   const navigate = useNavigate();
-  const email = "tranminhtri9090@gmail.com";
 
   // useEffect(() => {
   //   initializeUser();

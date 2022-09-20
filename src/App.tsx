@@ -4,17 +4,23 @@ import { PrivateRoute } from "components/routes/PrivateRoute";
 import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "initialization/theme";
 import { Toaster } from "react-hot-toast";
+import { AuthContextProvider } from "initialization/firebase";
 
 export const App = (): JSX.Element => {
   return (
-    <ChakraProvider theme={theme}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<PrivateRoute component={<HomePage />} />} />
-          <Route path="/auth" element={<AuthPage />} />
-        </Routes>
-      </Router>
-      <Toaster />
-    </ChakraProvider>
+    <AuthContextProvider>
+      <ChakraProvider theme={theme}>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={<PrivateRoute component={<HomePage />} />}
+            />
+            <Route path="/auth" element={<AuthPage />} />
+          </Routes>
+        </Router>
+        <Toaster />
+      </ChakraProvider>
+    </AuthContextProvider>
   );
 };
