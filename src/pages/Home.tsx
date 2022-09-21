@@ -26,6 +26,10 @@ export const HomePage = () => {
     initializeUser(user?.email);
   }, [user?.email]);
 
+  useEffect(() => {
+    querySavingGoals();
+  }, [userFb.id]);
+
   const initializeUser = async (email: string) => {
     if (email) {
       const queries = query(
@@ -71,6 +75,22 @@ export const HomePage = () => {
     setAmount("0");
     setTitle("");
     setDiscription("");
+  };
+  const querySavingGoals = async () => {
+    if (userFb.id) {
+      const queries = query(
+        collection(db, "goals"),
+        where("parentId", "==", userFb.id)
+      );
+      const { docs } = await getDocs(queries);
+      const currentSavingGoals = docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log("currentSavingGoals", currentSavingGoals);
+    }
   };
 
   return (
