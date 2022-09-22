@@ -8,12 +8,10 @@ export const NavBar = () => {
       w="100%"
       bg={"#484848"}
       h="10vh"
-      mb="3red"
+      mb="2rem"
       display="flex"
       justifyContent={"space-between"}
       alignItems="center"
-      position={"fixed"}
-      top="0px"
     >
       <Box color="white" ml="2rem">
         Habit Tracker

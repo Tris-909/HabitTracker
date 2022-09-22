@@ -10,7 +10,7 @@ import {
   where,
   DocumentData,
 } from "firebase/firestore";
-import { NavBar } from "components";
+import { NavBar, CreateGoalModal } from "components";
 
 export const HomePage = () => {
   const { user } = useAuthState();
@@ -82,6 +82,7 @@ export const HomePage = () => {
   return (
     <Box bg="#212121" h="100vh">
       <NavBar />
+      <CreateGoalModal />
       {/* <Box display={"flex"} flexDir="column" mt="5rem">
         <FormControl>
           <FormLabel>Title</FormLabel>
