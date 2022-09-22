@@ -5,13 +5,12 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
-  ModalBody,
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { CreateGoalForm } from "./CreateGoalForm";
 
-export const CreateGoalModal = () => {
+export const CreateGoalModal = (userFb: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -25,30 +24,7 @@ export const CreateGoalModal = () => {
         <ModalContent>
           <ModalHeader>Create Saving Goal</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>123</ModalBody>
-
-          <ModalFooter>
-            <Button
-              bg="black"
-              color="white"
-              _hover={{
-                bg: "#484848",
-              }}
-              mr={3}
-              onClick={onClose}
-            >
-              Close
-            </Button>
-            <Button
-              bg="black"
-              color="white"
-              _hover={{
-                bg: "#484848",
-              }}
-            >
-              Secondary Action
-            </Button>
-          </ModalFooter>
+          <CreateGoalForm userFb={userFb} onClose={onClose} />
         </ModalContent>
       </Modal>
     </Box>

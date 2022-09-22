@@ -15,9 +15,6 @@ import { NavBar, CreateGoalModal } from "components";
 export const HomePage = () => {
   const { user } = useAuthState();
   const [userFb, setUserFb] = useState<DocumentData>({});
-  const [amount, setAmount] = useState("0");
-  const [description, setDiscription] = useState("");
-  const [title, setTitle] = useState("");
 
   useEffect(() => {
     initializeUser(user?.email);
@@ -46,22 +43,6 @@ export const HomePage = () => {
     }
   };
 
-  const createSavingGoal = async () => {
-    addDoc(collection(db, "goals"), {
-      title: title,
-      goal: +amount,
-      current: 0,
-      description: description,
-      parentId: userFb.id,
-      userId: userFb.id,
-      createdBy: user.email,
-      createdAt: serverTimestamp(),
-    });
-
-    setAmount("0");
-    setTitle("");
-    setDiscription("");
-  };
   // const querySavingGoals = async () => {
   //   if (userFb.id) {
   //     const queries = query(
@@ -82,31 +63,7 @@ export const HomePage = () => {
   return (
     <Box bg="#212121" h="100vh">
       <NavBar />
-      <CreateGoalModal />
-      {/* <Box display={"flex"} flexDir="column" mt="5rem">
-        <FormControl>
-          <FormLabel>Title</FormLabel>
-          <Input
-            type="string"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-          <FormLabel>Amount</FormLabel>
-          <Input
-            type="number"
-            value={amount}
-            onChange={(event) => setAmount(event.target.value)}
-          />
-          <FormLabel mt="1rem">Description</FormLabel>
-          <Input
-            type="string"
-            value={description}
-            onChange={(event) => setDiscription(event.target.value)}
-          />
-          <Button onClick={() => createSavingGoal()}>Create Saving Goal</Button>
-        </FormControl>
-        <Button onClick={() => signOutHandler()}>Sign Out</Button>
-      </Box> */}
+      <CreateGoalModal userFb={userFb} />
     </Box>
   );
 };
