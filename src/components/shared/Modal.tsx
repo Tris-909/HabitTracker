@@ -11,14 +11,14 @@ interface SharedModalProps {
   isOpen: boolean;
   onClose: () => void;
   modalTitle: string;
-  ModalForm: any; // Component
+  modalForm: any; // Component
 }
 
 export const SharedModal = ({
   isOpen,
   onClose,
   modalTitle,
-  ModalForm,
+  modalForm,
 }: SharedModalProps) => {
   return (
     <Box>
@@ -27,7 +27,7 @@ export const SharedModal = ({
         <ModalContent>
           <ModalHeader>{modalTitle}</ModalHeader>
           <ModalCloseButton />
-          <ModalForm />
+          {modalForm}
         </ModalContent>
       </Modal>
     </Box>

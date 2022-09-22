@@ -10,7 +10,12 @@ import {
   where,
   DocumentData,
 } from "firebase/firestore";
-import { NavBar, CreateGoalModal, GoalChart } from "components";
+import {
+  NavBar,
+  CreateGoalModal,
+  GoalChart,
+  CreateStepModal,
+} from "components";
 import { SavingGoal } from "types";
 
 export const HomePage = () => {
@@ -80,7 +85,7 @@ export const HomePage = () => {
           {savingGoals.map((goal) => {
             return (
               <TabPanel>
-                <Box>Adding a Step here</Box>
+                <CreateStepModal userFb={userFb} />
                 <GoalChart goal={goal} />
               </TabPanel>
             );
