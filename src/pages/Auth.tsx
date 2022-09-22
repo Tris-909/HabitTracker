@@ -1,23 +1,21 @@
 import React, { useState } from "react";
-import { SignInForm, SignUpForm, LeftScreenImage } from "components";
+import { SignInForm, SignUpForm } from "components";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import { MEDIA_QUERY } from "consts";
 import { colors } from "consts";
 
 export const AuthPage: React.FunctionComponent = () => {
   const [showForm, setShowForm] = useState("signin");
-  const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`);
 
   return (
-    <Flex bg={colors.black} height="100vh" width="100%">
-      {isDesktop && <LeftScreenImage />}
-      <Flex
-        w={isDesktop ? "50%" : "100%"}
-        bg="white"
-        justify={"center"}
-        align="center"
-        position={"relative"}
-      >
+    <Flex
+      bg={"white"}
+      height="100vh"
+      width="100%"
+      justify="center"
+      alignItems="center"
+    >
+      <Flex>
         {showForm === "signin" ? (
           <SignInForm changeFormState={setShowForm} />
         ) : (

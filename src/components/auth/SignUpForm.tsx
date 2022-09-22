@@ -65,11 +65,9 @@ export const SignUpForm = ({
       p="1rem"
       height="100%"
     >
-      {!isDesktop && (
-        <Heading size="4xl" mb="5rem">
-          Habit Tracker
-        </Heading>
-      )}
+      <Heading size="4xl" mb="5rem">
+        Habit Tracker
+      </Heading>
       <Heading size="3xl" mb="2rem">
         Sign Up.
       </Heading>
