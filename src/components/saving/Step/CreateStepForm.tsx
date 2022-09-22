@@ -13,9 +13,11 @@ import { db } from "initialization/firebase";
 
 export const CreateStepForm = ({
   userFb,
+  goal,
   onClose,
 }: {
   userFb: any;
+  goal: any;
   onClose: () => void;
 }) => {
   const [amount, setAmount] = useState("");
@@ -24,10 +26,9 @@ export const CreateStepForm = ({
 
   const createStep = async () => {
     addDoc(collection(db, "steps"), {
-      goal: +amount,
-      current: 0,
+      amount: 0,
       description: description,
-      parentId: id,
+      parentId: goal.id,
       userId: id,
       createdBy: email,
       createdAt: serverTimestamp(),

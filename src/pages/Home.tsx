@@ -85,7 +85,7 @@ export const HomePage = () => {
           {savingGoals.map((goal) => {
             return (
               <TabPanel>
-                <CreateStepModal userFb={userFb} />
+                <CreateStepModal userFb={userFb} goal={goal} />
                 <GoalChart goal={goal} />
               </TabPanel>
             );
