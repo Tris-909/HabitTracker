@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { db, useAuthState } from "initialization/firebase";
-import { getAuth, signOut } from "firebase/auth";
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Box } from "@chakra-ui/react";
 import {
   collection,
   getDocs,
@@ -12,11 +10,10 @@ import {
   where,
   DocumentData,
 } from "firebase/firestore";
+import { NavBar } from "components";
 
 export const HomePage = () => {
-  const auth = getAuth();
   const { user } = useAuthState();
-  const navigate = useNavigate();
   const [userFb, setUserFb] = useState<DocumentData>({});
   const [amount, setAmount] = useState("0");
   const [description, setDiscription] = useState("");
@@ -26,9 +23,9 @@ export const HomePage = () => {
     initializeUser(user?.email);
   }, [user?.email]);
 
-  useEffect(() => {
-    querySavingGoals();
-  }, [userFb.id]);
+  // useEffect(() => {
+  //   querySavingGoals();
+  // }, [userFb.id]);
 
   const initializeUser = async (email: string) => {
     if (email) {
@@ -49,17 +46,6 @@ export const HomePage = () => {
     }
   };
 
-  const signOutHandler = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Sign Out Successfully");
-        navigate("/auth");
-      })
-      .catch((error) => {
-        console.log("error signing out", error.message);
-      });
-  };
-
   const createSavingGoal = async () => {
     addDoc(collection(db, "goals"), {
       title: title,
@@ -76,47 +62,50 @@ export const HomePage = () => {
     setTitle("");
     setDiscription("");
   };
-  const querySavingGoals = async () => {
-    if (userFb.id) {
-      const queries = query(
-        collection(db, "goals"),
-        where("parentId", "==", userFb.id)
-      );
-      const { docs } = await getDocs(queries);
-      const currentSavingGoals = docs.map((doc) => {
-        return {
-          id: doc.id,
-          ...doc.data(),
-        };
-      });
-      console.log("currentSavingGoals", currentSavingGoals);
-    }
-  };
+  // const querySavingGoals = async () => {
+  //   if (userFb.id) {
+  //     const queries = query(
+  //       collection(db, "goals"),
+  //       where("parentId", "==", userFb.id)
+  //     );
+  //     const { docs } = await getDocs(queries);
+  //     const currentSavingGoals = docs.map((doc) => {
+  //       return {
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       };
+  //     });
+  //     console.log("currentSavingGoals", currentSavingGoals);
+  //   }
+  // };
 
   return (
-    <Box display={"flex"} flexDir="column">
-      <FormControl>
-        <FormLabel>Title</FormLabel>
-        <Input
-          type="string"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <FormLabel>Amount</FormLabel>
-        <Input
-          type="number"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-        />
-        <FormLabel mt="1rem">Description</FormLabel>
-        <Input
-          type="string"
-          value={description}
-          onChange={(event) => setDiscription(event.target.value)}
-        />
-        <Button onClick={() => createSavingGoal()}>Create Saving Goal</Button>
-      </FormControl>
-      <Button onClick={() => signOutHandler()}>Sign Out</Button>
+    <Box bg="#212121" h="100vh">
+      <NavBar />
+      {/* <Box display={"flex"} flexDir="column" mt="5rem">
+        <FormControl>
+          <FormLabel>Title</FormLabel>
+          <Input
+            type="string"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+          <FormLabel>Amount</FormLabel>
+          <Input
+            type="number"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+          />
+          <FormLabel mt="1rem">Description</FormLabel>
+          <Input
+            type="string"
+            value={description}
+            onChange={(event) => setDiscription(event.target.value)}
+          />
+          <Button onClick={() => createSavingGoal()}>Create Saving Goal</Button>
+        </FormControl>
+        <Button onClick={() => signOutHandler()}>Sign Out</Button>
+      </Box> */}
     </Box>
   );
 };

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { SignInForm, SignUpForm } from "components";
-import { Flex, useMediaQuery } from "@chakra-ui/react";
-import { MEDIA_QUERY } from "consts";
-import { colors } from "consts";
+import { Flex } from "@chakra-ui/react";
 
 export const AuthPage: React.FunctionComponent = () => {
   const [showForm, setShowForm] = useState("signin");
