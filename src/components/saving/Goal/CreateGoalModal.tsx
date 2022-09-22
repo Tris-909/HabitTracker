@@ -16,7 +16,7 @@ export const CreateGoalModal = (userFb: any) => {
   return (
     <Box color="white">
       <Button ml="2rem" bg="white" color="black" onClick={onOpen}>
-        Open Modal
+        Create Saving Goal
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
