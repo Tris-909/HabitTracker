@@ -26,7 +26,7 @@ export const CreateStepForm = ({
 
   const createStep = async () => {
     addDoc(collection(db, "steps"), {
-      amount: 0,
+      amount: amount,
       description: description,
       parentId: goal.id,
       userId: id,

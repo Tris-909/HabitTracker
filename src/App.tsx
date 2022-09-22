@@ -5,6 +5,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "initialization/theme";
 import { Toaster } from "react-hot-toast";
 import { AuthContextProvider } from "initialization/firebase";
+import dayjs from "dayjs";
+dayjs().format();
 
 export const App = (): JSX.Element => {
   return (
