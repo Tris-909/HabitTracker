@@ -80,6 +80,7 @@ export const HomePage = () => {
           {savingGoals.map((goal) => {
             return (
               <TabPanel>
+                <Box>Adding a Step here</Box>
                 <GoalChart goal={goal} />
               </TabPanel>
             );

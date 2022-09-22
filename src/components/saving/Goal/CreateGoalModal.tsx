@@ -1,14 +1,6 @@
-import {
-  Box,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { CreateGoalForm } from "./CreateGoalForm";
+import { SharedModal } from "components";
 
 export const CreateGoalModal = (userFb: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -19,14 +11,12 @@ export const CreateGoalModal = (userFb: any) => {
         Create Saving Goal
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create Saving Goal</ModalHeader>
-          <ModalCloseButton />
-          <CreateGoalForm userFb={userFb} onClose={onClose} />
-        </ModalContent>
-      </Modal>
+      <SharedModal
+        isOpen={isOpen}
+        onClose={onClose}
+        ModalForm={<CreateGoalForm userFb={userFb} onClose={onClose} />}
+        modalTitle="Create Saving Goal"
+      />
     </Box>
   );
 };
