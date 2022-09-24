@@ -14,7 +14,7 @@ export const CreateGoalModal = (userFb: any) => {
       <SharedModal
         isOpen={isOpen}
         onClose={onClose}
-        modalForm={<CreateGoalForm userFb={userFb} onClose={onClose} />}
+        modalForm={<CreateGoalForm onClose={onClose} />}
         modalTitle="Create Saving Goal"
       />
     </Box>

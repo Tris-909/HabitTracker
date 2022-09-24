@@ -9,18 +9,13 @@ import {
 } from "@chakra-ui/react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "initialization/firebase";
+import { useStore } from "state";
 
-export const CreateGoalForm = ({
-  userFb,
-  onClose,
-}: {
-  userFb: any;
-  onClose: () => void;
-}) => {
+export const CreateGoalForm = ({ onClose }: { onClose: () => void }) => {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const { id, email } = userFb.userFb;
+  const { user } = useStore((state) => state.firestore);
 
   const createSavingGoal = async () => {
     addDoc(collection(db, "goals"), {
@@ -28,9 +23,9 @@ export const CreateGoalForm = ({
       goal: +amount,
       current: 0,
       description: description,
-      parentId: id,
-      userId: id,
-      createdBy: email,
+      parentId: user.id,
+      userId: user.id,
+      createdBy: user.email,
       createdAt: serverTimestamp(),
     });
 

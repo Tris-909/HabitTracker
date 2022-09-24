@@ -10,27 +10,26 @@ import {
 } from "@chakra-ui/react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "initialization/firebase";
+import { useStore } from "state";
 
 export const CreateStepForm = ({
-  userFb,
   goal,
   onClose,
 }: {
-  userFb: any;
   goal: any;
   onClose: () => void;
 }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const { id, email } = userFb;
+  const { user } = useStore((state) => state.firestore);
 
   const createStep = async () => {
     addDoc(collection(db, "steps"), {
       amount: amount,
       description: description,
       parentId: goal.id,
-      userId: id,
-      createdBy: email,
+      userId: user.id,
+      createdBy: user.email,
       createdAt: serverTimestamp(),
     });
 

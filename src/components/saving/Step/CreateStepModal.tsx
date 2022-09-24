@@ -2,13 +2,7 @@ import { SharedModal } from "components";
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { CreateStepForm } from "./CreateStepForm";
 
-export const CreateStepModal = ({
-  userFb,
-  goal,
-}: {
-  userFb: any;
-  goal: any;
-}) => {
+export const CreateStepModal = ({ goal }: { goal: any }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -27,9 +21,7 @@ export const CreateStepModal = ({
       <SharedModal
         isOpen={isOpen}
         onClose={onClose}
-        modalForm={
-          <CreateStepForm userFb={userFb} goal={goal} onClose={onClose} />
-        }
+        modalForm={<CreateStepForm goal={goal} onClose={onClose} />}
         modalTitle="Adding One Step"
       />
     </Box>
