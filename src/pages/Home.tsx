@@ -8,7 +8,6 @@ import {
   serverTimestamp,
   query,
   where,
-  DocumentData,
 } from "firebase/firestore";
 import {
   NavBar,
@@ -17,31 +16,27 @@ import {
   CreateStepModal,
 } from "components";
 import { SavingGoal } from "types";
+import { useStore } from "state";
 
 export const HomePage = () => {
-  const { user } = useAuthState();
-  const [userFb, setUserFb] = useState<DocumentData>({});
+  const { user: authUser } = useAuthState();
   const [savingGoals, setSavingGoals] = useState<SavingGoal[]>([]);
+  const { user } = useStore((state) => state.firestore);
+  const fetchUser = useStore((state) => state.fetchUser);
 
   useEffect(() => {
-    initializeUser(user?.email);
-  }, [user?.email]);
+    initializeUser(authUser?.email);
+  }, [authUser?.email]);
 
   useEffect(() => {
     querySavingGoals();
-  }, [userFb.id]);
+  }, [user.id]);
 
   const initializeUser = async (email: string) => {
     if (email) {
-      const queries = query(
-        collection(db, "users"),
-        where("email", "==", email)
-      );
-      const { docs } = await getDocs(queries);
-      const currentUser = docs[0]?.data();
-      setUserFb({ id: docs[0].id, ...currentUser });
+      await fetchUser(email);
 
-      if (!currentUser) {
+      if (!user) {
         addDoc(collection(db, "users"), {
           email: email,
           createdAt: serverTimestamp(),
@@ -51,10 +46,10 @@ export const HomePage = () => {
   };
 
   const querySavingGoals = async () => {
-    if (userFb.id) {
+    if (user.id) {
       const queries = query(
         collection(db, "goals"),
-        where("parentId", "==", userFb.id)
+        where("parentId", "==", user.id)
       );
       const { docs } = await getDocs(queries);
       const currentSavingGoals = docs.map((doc) => {
@@ -73,7 +68,7 @@ export const HomePage = () => {
   return (
     <Box bg="#212121" h="100vh">
       <NavBar />
-      <CreateGoalModal userFb={userFb} />
+      <CreateGoalModal userFb={user} />
       <Tabs w="40%" bg="white" mt="2rem" ml="2rem">
         <TabList>
           {savingGoals.map((goal) => {
@@ -85,7 +80,7 @@ export const HomePage = () => {
           {savingGoals.map((goal) => {
             return (
               <TabPanel>
-                <CreateStepModal userFb={userFb} goal={goal} />
+                <CreateStepModal userFb={user} goal={goal} />
                 <GoalChart goal={goal} />
               </TabPanel>
             );
