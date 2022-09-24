@@ -15,7 +15,7 @@ export const CreateGoalForm = ({ onClose }: { onClose: () => void }) => {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const { user } = useStore((state) => state.firestore);
+  const user = useStore((state) => state.user);
 
   const createSavingGoal = async () => {
     addDoc(collection(db, "goals"), {

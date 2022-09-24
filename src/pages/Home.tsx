@@ -7,21 +7,22 @@ import {
   GoalChart,
   CreateStepModal,
 } from "components";
-import { useStore } from "state";
+import { useStore, useGoalStore } from "state";
 
 export const HomePage = () => {
   const { user: authUser } = useAuthState();
-  const { user, goals } = useStore((state) => state.firestore);
+  const user = useStore((state) => state.user);
+  const goals = useGoalStore((state) => state.goals);
   const fetchUser = useStore((state) => state.fetchUser);
-  const fetchAllGoals = useStore((state) => state.fetchAllGoals);
+  const fetchAllGoals = useGoalStore((state) => state.fetchAllGoals);
 
   useEffect(() => {
     initializeUser(authUser?.email);
   }, [authUser?.email]);
 
   useEffect(() => {
-    fetchAllGoals();
-  }, [user]);
+    fetchAllGoals({ userId: user?.id });
+  }, [user?.id]);
 
   const initializeUser = async (email: string) => {
     if (email) {

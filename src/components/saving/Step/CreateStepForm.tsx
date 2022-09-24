@@ -8,9 +8,7 @@ import {
   ModalFooter,
   Textarea,
 } from "@chakra-ui/react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "initialization/firebase";
-import { useStore } from "state";
+import { useStore, useStepStore } from "state";
 
 export const CreateStepForm = ({
   goal,
@@ -21,18 +19,16 @@ export const CreateStepForm = ({
 }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const { user } = useStore((state) => state.firestore);
+  const user = useStore((state) => state.user);
+  const createStep = useStepStore((state) => state.createStep);
 
-  const createStep = async () => {
-    addDoc(collection(db, "steps"), {
+  const createHandler = async () => {
+    createStep({
       amount: amount,
       description: description,
-      parentId: goal.id,
-      userId: user.id,
-      createdBy: user.email,
-      createdAt: serverTimestamp(),
+      goalId: goal.id,
+      user: user,
     });
-
     resetForm();
   };
 
@@ -78,7 +74,7 @@ export const CreateStepForm = ({
             bg: "#484848",
           }}
           onClick={() => {
-            createStep();
+            createHandler();
             onClose();
           }}
         >

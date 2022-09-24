@@ -9,9 +9,8 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useState, useEffect } from "react";
-import { db } from "initialization/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect } from "react";
+import { useStepStore } from "state";
 import dayjs from "dayjs";
 
 ChartJS.register(
@@ -25,11 +24,12 @@ ChartJS.register(
 );
 
 export const GoalChart = ({ goal }: { goal: any }) => {
-  const [steps, setSteps] = useState<any>(null);
+  const steps = useStepStore((state) => state.steps);
+  const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
 
   useEffect(() => {
     if (!steps?.legnth) {
-      queryRelatedSteps();
+      fetchStepsByGoalId({ goalId: goal.id });
     }
   }, [goal.id]);
 
@@ -50,23 +50,6 @@ export const GoalChart = ({ goal }: { goal: any }) => {
         text: goal.description,
       },
     },
-  };
-
-  const queryRelatedSteps = async () => {
-    const queries = query(
-      collection(db, "steps"),
-      where("parentId", "==", goal.id)
-    );
-    const { docs } = await getDocs(queries);
-    const steps = docs.map((doc) => {
-      const step = {
-        id: doc.id,
-        ...doc.data(),
-      };
-
-      return step;
-    });
-    setSteps(steps);
   };
 
   const constuctLabels = () => {
