@@ -16,6 +16,7 @@ import { useTable } from "react-table";
 import dayjs from "dayjs";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { LongStepDescriptionModal } from "./LongStepDescriptionModal";
+import { EditStepModal } from "./EditStepModal";
 
 export const StepTable = () => {
   const columns = useMemo(
@@ -41,6 +42,7 @@ export const StepTable = () => {
   );
   const steps = useStepStore((state) => state.steps);
   const deleteStepById = useStepStore((state) => state.deleteStepById);
+  const updateStepId = useStepStore((state) => state.updateStepId);
   const { getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
     columns: columns,
     data: steps,
@@ -50,6 +52,10 @@ export const StepTable = () => {
     if (header === "Date") {
       return dayjs(cell.value).format("DD/M");
     } else if (header === "Action") {
+      const currentStep = steps.filter(
+        (step: any) => step.id === cell.value
+      )[0];
+
       return (
         <Box
           display="flex"
@@ -57,12 +63,7 @@ export const StepTable = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Button
-            onClick={() => editStepHandler(cell.value)}
-            rightIcon={<FiEdit2 />}
-          >
-            Edit
-          </Button>
+          <EditStepModal step={currentStep} />
           <Button
             mt="0.5rem"
             bg="#ff3034"
@@ -100,6 +101,7 @@ export const StepTable = () => {
 
   const editStepHandler = (stepId: string) => {
     console.log("stepId", stepId);
+    // await updateStepId({ stepId: stepId, amount: amount, description: description });
   };
 
   const deleteStepHandler = async (stepId: string) => {

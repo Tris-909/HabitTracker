@@ -9,6 +9,7 @@ import {
   addDoc,
   serverTimestamp,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 export const useStore = create((set, get) => ({
@@ -90,16 +91,31 @@ export const useStepStore = create((set, get) => ({
 
     set({ steps: steps });
   },
+  updateStepId: async ({ stepId, amount, description }) => {
+    const newStepsArr = get().steps.map((step) => {
+      if (step.id === stepId) {
+        return {
+          ...step,
+          amount: amount,
+          description: description,
+        };
+      }
+    });
+    set({
+      steps: newStepsArr,
+    });
+
+    await updateDoc(doc(db, "steps", stepId), {
+      amount: amount,
+      description: description,
+    });
+  },
   deleteStepById: async ({ stepId }) => {
-    // delete locally
-    console.log("before filter", get().steps);
     const newStepsArr = get().steps.filter((step) => step.id !== stepId);
     set({
       steps: newStepsArr,
     });
-    console.log("after filter", newStepsArr);
 
-    // delete remotely
     await deleteDoc(doc(db, "steps", stepId));
   },
 }));
