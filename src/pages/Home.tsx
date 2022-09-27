@@ -77,11 +77,7 @@ export const HomePage = () => {
             </Tabs>
           )}
         </Box>
-        <Box
-          bg="red"
-          w={isDesktop ? "40%" : "90%"}
-          mt={isDesktop ? "0rem" : "2rem"}
-        >
+        <Box w={isDesktop ? "50%" : "90%"} mt={isDesktop ? "0rem" : "2rem"}>
           <StepTable />
         </Box>
       </Box>

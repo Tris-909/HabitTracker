@@ -9,11 +9,22 @@ import {
   TableCaption,
   TableContainer,
   Button,
+  Icon,
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useStepStore } from "state";
 import { useTable } from "react-table";
 import dayjs from "dayjs";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiPlusSquare } from "react-icons/fi";
+import { LongStepDescriptionModal } from "./LongStepDescriptionModal";
 
 export const StepTable = () => {
   const columns = useMemo(
@@ -58,6 +69,22 @@ export const StepTable = () => {
           Edit
         </Button>
       );
+    } else if (header === "Description") {
+      let shortVersion = "";
+      const LENGTH_RULE = 20;
+      if (cell.value.length > LENGTH_RULE) {
+        shortVersion = cell.value.slice(0, LENGTH_RULE);
+      }
+      const shortDescription = `${shortVersion}...`;
+
+      return shortVersion ? (
+        <LongStepDescriptionModal
+          shortDescription={shortDescription}
+          longDescription={cell.value}
+        />
+      ) : (
+        cell.value
+      );
     } else {
       return cell.value;
     }
@@ -71,9 +98,10 @@ export const StepTable = () => {
     <TableContainer>
       <Table bg="white" variant="simple" {...getTableProps()}>
         <TableCaption
-          color="white"
+          color="#212121"
+          bg="white"
           fontSize={"3xl"}
-          mb="1rem"
+          borderBottom="1px solid black"
           mt="0"
           pt="0"
           placement="top"
