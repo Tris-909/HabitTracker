@@ -1,12 +1,14 @@
 import create from "zustand";
 import { db } from "initialization/firebase";
 import {
+  doc,
   collection,
   getDocs,
   query,
   where,
   addDoc,
   serverTimestamp,
+  deleteDoc,
 } from "firebase/firestore";
 
 export const useStore = create((set, get) => ({
@@ -87,5 +89,17 @@ export const useStepStore = create((set, get) => ({
     }));
 
     set({ steps: steps });
+  },
+  deleteStepById: async ({ stepId }) => {
+    // delete locally
+    console.log("before filter", get().steps);
+    const newStepsArr = get().steps.filter((step) => step.id !== stepId);
+    set({
+      steps: newStepsArr,
+    });
+    console.log("after filter", newStepsArr);
+
+    // delete remotely
+    await deleteDoc(doc(db, "steps", stepId));
   },
 }));

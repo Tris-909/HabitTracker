@@ -9,21 +9,12 @@ import {
   TableCaption,
   TableContainer,
   Button,
-  Icon,
   Box,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useStepStore } from "state";
 import { useTable } from "react-table";
 import dayjs from "dayjs";
-import { FiEdit2, FiPlusSquare } from "react-icons/fi";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { LongStepDescriptionModal } from "./LongStepDescriptionModal";
 
 export const StepTable = () => {
@@ -49,25 +40,42 @@ export const StepTable = () => {
     []
   );
   const steps = useStepStore((state) => state.steps);
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns: columns,
-      data: steps,
-    });
-
-  console.log("steps", steps);
+  const deleteStepById = useStepStore((state) => state.deleteStepById);
+  const { getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
+    columns: columns,
+    data: steps,
+  });
 
   const renderCellComponent = (header: any, cell: any) => {
     if (header === "Date") {
       return dayjs(cell.value).format("DD/M");
     } else if (header === "Action") {
       return (
-        <Button
-          onClick={() => editStepHandler(cell.value)}
-          rightIcon={<FiEdit2 />}
+        <Box
+          display="flex"
+          flexDir="column"
+          justifyContent="center"
+          alignItems="center"
         >
-          Edit
-        </Button>
+          <Button
+            onClick={() => editStepHandler(cell.value)}
+            rightIcon={<FiEdit2 />}
+          >
+            Edit
+          </Button>
+          <Button
+            mt="0.5rem"
+            bg="#ff3034"
+            _hover={{
+              bg: "#cc2326",
+            }}
+            color="white"
+            onClick={() => deleteStepHandler(cell.value)}
+            rightIcon={<FiTrash2 />}
+          >
+            Delete
+          </Button>
+        </Box>
       );
     } else if (header === "Description") {
       let shortVersion = "";
@@ -92,6 +100,10 @@ export const StepTable = () => {
 
   const editStepHandler = (stepId: string) => {
     console.log("stepId", stepId);
+  };
+
+  const deleteStepHandler = async (stepId: string) => {
+    await deleteStepById({ stepId: stepId });
   };
 
   return (
