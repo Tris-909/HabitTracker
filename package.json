@@ -26,6 +26,7 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
+    "react-table": "^7.8.0",
     "typescript": "^4.8.3",
     "web-vitals": "^2.1.4",
     "zustand": "^4.1.1"
@@ -55,6 +56,7 @@
     ]
   },
   "devDependencies": {
-    "@types/chart.js": "^2.9.37"
+    "@types/chart.js": "^2.9.37",
+    "@types/react-table": "^7.7.12"
   }
 }

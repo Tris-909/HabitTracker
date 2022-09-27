@@ -49,6 +49,18 @@ export const GoalChart = ({ goal }: { goal: any }) => {
         },
         text: goal.description,
       },
+      tooltip: {
+        callbacks: {
+          title: (chart: any) => {
+            const sortedSteps = steps.sort(
+              (a: any, b: any) => a.createdAt.seconds > b.createdAt.seconds
+            );
+            return sortedSteps[chart[0].dataIndex - 1]?.description
+              ? sortedSteps[chart[0].dataIndex - 1]?.description
+              : "Starting Point";
+          },
+        },
+      },
     },
   };
 
@@ -78,6 +90,16 @@ export const GoalChart = ({ goal }: { goal: any }) => {
       return [0, ...amountArray];
     }
   };
+  const constructIds = () => {
+    if (steps) {
+      const sortedSteps = steps.sort(
+        (a: any, b: any) => a.createdAt.seconds > b.createdAt.seconds
+      );
+      const stepIds = sortedSteps.map((step: any) => step.id);
+
+      return stepIds;
+    }
+  };
 
   const labels: any = constuctLabels();
   const data: any = {
@@ -88,7 +110,8 @@ export const GoalChart = ({ goal }: { goal: any }) => {
         data: constructData(),
         borderColor: "rgba(93, 93, 93, 0.8)",
         backgroundColor: "rgba(93, 93, 93, 0.8)",
-        pointRadius: 0,
+        pointRadius: 3,
+        ids: constructIds(),
       },
       {
         label: "Max",
