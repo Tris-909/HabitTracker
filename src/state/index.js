@@ -6,6 +6,7 @@ import {
   getDocs,
   query,
   where,
+  orderBy,
   addDoc,
   serverTimestamp,
   deleteDoc,
@@ -104,9 +105,11 @@ export const useStepStore = create((set, get) => ({
     try {
       const queries = query(
         collection(db, "steps"),
-        where("parentId", "==", goalId)
+        where("parentId", "==", goalId),
+        orderBy("createdAt", "desc")
       );
       const { docs } = await getDocs(queries);
+      console.log("doics", docs);
       const steps = docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -134,7 +137,6 @@ export const useStepStore = create((set, get) => ({
         }
         return step;
       });
-      console.log("newStepsArr", newStepsArr);
       set({
         steps: newStepsArr,
       });

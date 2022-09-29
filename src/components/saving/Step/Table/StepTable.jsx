@@ -12,11 +12,18 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useStepStore } from "state";
-import { useTable } from "react-table";
+import { useTable, usePagination } from "react-table";
 import dayjs from "dayjs";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import { LongStepDescriptionModal } from "./LongStepDescriptionModal";
-import { EditStepModal } from "./EditStepModal";
+import {
+  FiTrash2,
+  FiChevronsLeft,
+  FiChevronLeft,
+  FiChevronRight,
+  FiChevronsRight,
+} from "react-icons/fi";
+import { LongStepDescriptionModal } from "../LongStepDescriptionModal";
+import { EditStepModal } from "../EditStepModal";
+import { TableFooterButton } from "./TableFooterButton";
 
 export const StepTable = () => {
   const columns = useMemo(
@@ -42,19 +49,32 @@ export const StepTable = () => {
   );
   const steps = useStepStore((state) => state.steps);
   const deleteStepById = useStepStore((state) => state.deleteStepById);
-  const updateStepId = useStepStore((state) => state.updateStepId);
-  const { getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
-    columns: columns,
-    data: steps,
-  });
+  const {
+    getTableProps,
+    getTableBodyProps,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns: columns,
+      data: steps,
+      initialState: { pageIndex: 0, pageSize: 3 },
+    },
+    usePagination
+  );
 
-  const renderCellComponent = (header: any, cell: any) => {
+  const renderCellComponent = (header, cell) => {
     if (header === "Date") {
       return dayjs(cell.value).format("DD/M");
     } else if (header === "Action") {
-      const currentStep = steps.filter(
-        (step: any) => step.id === cell.value
-      )[0];
+      const currentStep = steps.filter((step) => step.id === cell.value)[0];
 
       return (
         <Box
@@ -99,12 +119,7 @@ export const StepTable = () => {
     }
   };
 
-  const editStepHandler = (stepId: string) => {
-    console.log("stepId", stepId);
-    // await updateStepId({ stepId: stepId, amount: amount, description: description });
-  };
-
-  const deleteStepHandler = async (stepId: string) => {
+  const deleteStepHandler = async (stepId) => {
     await deleteStepById({ stepId: stepId });
   };
 
@@ -130,7 +145,7 @@ export const StepTable = () => {
           </Tr>
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {page.map((row, i) => {
             prepareRow(row);
             return (
               <Tr {...row.getRowProps()}>
@@ -147,6 +162,55 @@ export const StepTable = () => {
           })}
         </Tbody>
       </Table>
+      <Box
+        w="100%"
+        pt="3"
+        pb="3"
+        bg="white"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        position="relative"
+      >
+        <Box position="absolute" right="2%">
+          Total : {steps.length}
+        </Box>
+        <Box mr="3">
+          <TableFooterButton
+            tooltipMessage="First Page"
+            onClickHandler={() => gotoPage(0)}
+            isDisabled={!canPreviousPage}
+            ButtonIcon={<FiChevronsLeft />}
+            ariaLabel={"First page"}
+          />
+          <TableFooterButton
+            tooltipMessage="Previous Page"
+            onClickHandler={previousPage}
+            isDisabled={!canPreviousPage}
+            ButtonIcon={<FiChevronLeft />}
+            ariaLabel={"Previous Page"}
+          />
+        </Box>
+
+        <Box>{pageIndex}</Box>
+
+        <Box ml="6">
+          <TableFooterButton
+            tooltipMessage="Next Page"
+            onClickHandler={nextPage}
+            isDisabled={!canNextPage}
+            ButtonIcon={<FiChevronRight />}
+            ariaLabel={"Next Page"}
+          />
+          <TableFooterButton
+            tooltipMessage="Last Page"
+            onClickHandler={() => gotoPage(pageCount - 1)}
+            isDisabled={!canNextPage}
+            ButtonIcon={<FiChevronsRight />}
+            ariaLabel={"Last Page"}
+          />
+        </Box>
+      </Box>
     </TableContainer>
   );
 };
