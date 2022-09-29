@@ -11,6 +11,7 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
+import { notify, notifyRules } from "components";
 
 export const useStore = create((set, get) => ({
   user: {},
@@ -24,7 +25,7 @@ export const useStore = create((set, get) => ({
       const { docs } = await getDocs(queries);
       const currentUser = { id: docs[0].id, ...docs[0]?.data() };
 
-      // Create user profile the first time they log-in
+      // Create user in cloudstore the first time they log-in
       if (!currentUser?.id) {
         addDoc(collection(db, "users"), {
           email: email,
@@ -42,20 +43,28 @@ export const useStore = create((set, get) => ({
 export const useGoalStore = create((set, get) => ({
   goals: [],
   fetchAllGoals: async ({ userId }) => {
-    if (userId) {
-      const queries = query(
-        collection(db, "goals"),
-        where("parentId", "==", userId)
-      );
-      const { docs } = await getDocs(queries);
-      const savingGoals = docs.map((doc) => {
-        return {
-          id: doc.id,
-          ...doc.data(),
-        };
-      });
+    try {
+      if (userId) {
+        const queries = query(
+          collection(db, "goals"),
+          where("parentId", "==", userId)
+        );
+        const { docs } = await getDocs(queries);
+        const savingGoals = docs.map((doc) => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          };
+        });
 
-      set({ goals: savingGoals });
+        set({ goals: savingGoals });
+      }
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to load goals, please refresh the page",
+        notifyRule: notifyRules.ERROR,
+      });
     }
   },
 }));
@@ -63,59 +72,108 @@ export const useGoalStore = create((set, get) => ({
 export const useStepStore = create((set, get) => ({
   steps: [],
   createStep: async ({ user, amount, description, goalId }) => {
-    const { id, email } = user;
-    const step = {
-      amount: amount,
-      description: description,
-      parentId: goalId,
-      userId: id,
-      createdBy: email,
-      createdAt: serverTimestamp(),
-    };
-    const result = await addDoc(collection(db, "steps"), step);
+    try {
+      const { id, email } = user;
+      const step = {
+        amount: amount,
+        description: description,
+        parentId: goalId,
+        userId: id,
+        createdBy: email,
+        createdAt: serverTimestamp(),
+      };
+      const result = await addDoc(collection(db, "steps"), step);
 
-    set({
-      steps: [...get().steps, { id: result.id, ...step }],
-    });
+      set({
+        steps: [...get().steps, { id: result.id, ...step }],
+      });
+
+      notify({
+        notifyMessage: "Created a step succesfully.",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to create a step, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
   },
   fetchStepsByGoalId: async ({ goalId }) => {
-    const queries = query(
-      collection(db, "steps"),
-      where("parentId", "==", goalId)
-    );
-    const { docs } = await getDocs(queries);
-    const steps = docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    try {
+      const queries = query(
+        collection(db, "steps"),
+        where("parentId", "==", goalId)
+      );
+      const { docs } = await getDocs(queries);
+      const steps = docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-    set({ steps: steps });
+      set({ steps: steps });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage:
+          "Failed to fetch all steps for this goal, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
   },
   updateStepId: async ({ stepId, amount, description }) => {
-    const newStepsArr = get().steps.map((step) => {
-      if (step.id === stepId) {
-        return {
-          ...step,
-          amount: amount,
-          description: description,
-        };
-      }
-    });
-    set({
-      steps: newStepsArr,
-    });
+    try {
+      const newStepsArr = get().steps.map((step) => {
+        if (step.id === stepId) {
+          return {
+            ...step,
+            amount: amount,
+            description: description,
+          };
+        }
+        return step;
+      });
+      console.log("newStepsArr", newStepsArr);
+      set({
+        steps: newStepsArr,
+      });
 
-    await updateDoc(doc(db, "steps", stepId), {
-      amount: amount,
-      description: description,
-    });
+      await updateDoc(doc(db, "steps", stepId), {
+        amount: amount,
+        description: description,
+      });
+
+      notify({
+        notifyMessage: "Update a step succesfully.",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to update a step, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
   },
   deleteStepById: async ({ stepId }) => {
-    const newStepsArr = get().steps.filter((step) => step.id !== stepId);
-    set({
-      steps: newStepsArr,
-    });
+    try {
+      const newStepsArr = get().steps.filter((step) => step.id !== stepId);
+      set({
+        steps: newStepsArr,
+      });
 
-    await deleteDoc(doc(db, "steps", stepId));
+      await deleteDoc(doc(db, "steps", stepId));
+      notify({
+        notifyMessage: "Delete a step sucessfully",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to update a step, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
   },
 }));

@@ -7,7 +7,6 @@ import {
   Input,
   Heading,
   Flex,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import {

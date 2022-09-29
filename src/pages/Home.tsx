@@ -8,6 +8,7 @@ import {
   Tab,
   TabPanel,
   useMediaQuery,
+  Button,
 } from "@chakra-ui/react";
 import {
   NavBar,
@@ -18,6 +19,7 @@ import {
 } from "components";
 import { useStore, useGoalStore } from "state";
 import { MEDIA_QUERY } from "consts";
+import { notify, notifyRules } from "components";
 
 export const HomePage = () => {
   const { user: authUser } = useAuthState();
@@ -43,9 +45,23 @@ export const HomePage = () => {
     }
   };
 
+  const test = () => {
+    notify({
+      notifyMessage: "Failed to load goals, please refresh the page",
+      notifyRule: notifyRules.NOTIFICATION,
+    });
+  };
+
   return (
     <Box bg="#212121" minHeight={"100vh"}>
       <NavBar />
+      <Button
+        onClick={() => {
+          test();
+        }}
+      >
+        test
+      </Button>
       <CreateGoalModal />
       <Box
         w="100%"

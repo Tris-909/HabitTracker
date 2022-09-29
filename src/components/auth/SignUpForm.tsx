@@ -7,16 +7,14 @@ import {
   Input,
   Heading,
   Flex,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { MEDIA_QUERY } from "consts";
 import { GroupButtons } from "./GroupButtons";
-import { notify } from "components";
+import { notify, notifyRules } from "components";
 
 export const SignUpForm = ({
   changeFormState,
@@ -27,9 +25,6 @@ export const SignUpForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`, {
-    ssr: false,
-  });
 
   const signUpHandler = async () => {
     if (email && password) {
@@ -39,6 +34,7 @@ export const SignUpForm = ({
           sendEmailVerification(user);
           notify({
             notifyMessage: "Please verify the user's email before login",
+            notifyRule: notifyRules.NOTIFICATION,
           });
         })
         .catch((error) => {
