@@ -10,6 +10,7 @@ import {
   TableContainer,
   Button,
   Box,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { useStepStore } from "state";
 import { useTable, usePagination } from "react-table";
@@ -24,6 +25,7 @@ import {
 import { LongStepDescriptionModal } from "../LongStepDescriptionModal";
 import { EditStepModal } from "../EditStepModal";
 import { TableFooterButton } from "./TableFooterButton";
+import { MEDIA_QUERY } from "consts";
 
 export const StepTable = () => {
   const columns = useMemo(
@@ -69,6 +71,9 @@ export const StepTable = () => {
     },
     usePagination
   );
+  const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`, {
+    ssr: false,
+  });
 
   const renderCellComponent = (header, cell) => {
     if (header === "Date") {
@@ -172,9 +177,12 @@ export const StepTable = () => {
         alignItems="center"
         position="relative"
       >
-        <Box position="absolute" right="2%">
-          Total : {steps.length}
-        </Box>
+        {isDesktop ? (
+          <Box position="absolute" right="2%">
+            Total : {steps.length}
+          </Box>
+        ) : null}
+
         <Box mr="3">
           <TableFooterButton
             tooltipMessage="First Page"

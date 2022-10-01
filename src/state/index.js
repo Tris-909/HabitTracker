@@ -39,6 +39,11 @@ export const useStore = create((set, get) => ({
       });
     }
   },
+  clearUserStore: () => {
+    set({
+      user: {},
+    });
+  },
 }));
 
 export const useGoalStore = create((set, get) => ({
@@ -67,6 +72,11 @@ export const useGoalStore = create((set, get) => ({
         notifyRule: notifyRules.ERROR,
       });
     }
+  },
+  clearGoalsStore: () => {
+    set({
+      goals: {},
+    });
   },
 }));
 
@@ -177,5 +187,10 @@ export const useStepStore = create((set, get) => ({
         notifyRule: notifyRules.ERROR,
       });
     }
+  },
+  clearStepsStore: () => {
+    set({
+      goals: {},
+    });
   },
 }));

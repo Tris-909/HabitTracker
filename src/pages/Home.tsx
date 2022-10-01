@@ -8,7 +8,6 @@ import {
   Tab,
   TabPanel,
   useMediaQuery,
-  Button,
 } from "@chakra-ui/react";
 import {
   NavBar,
