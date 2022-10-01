@@ -5,19 +5,12 @@ import {
   Box,
   Input,
   Button,
-  IconButton,
   ModalBody,
   ModalFooter,
   Textarea,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
 } from "@chakra-ui/react";
 import { useStore, useStepStore } from "state";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-import { FiSmile } from "react-icons/fi";
+import { EmojiPicker } from "components/shared";
 
 export const CreateStepForm = ({ goal, onClose }) => {
   const [amount, setAmount] = useState("");
@@ -56,26 +49,7 @@ export const CreateStepForm = ({ goal, onClose }) => {
             alignItems={"center"}
           >
             <FormLabel mt="1rem">Description</FormLabel>
-            <Popover>
-              <PopoverTrigger>
-                <IconButton
-                  bg="white"
-                  border="1px solid #e8e3e3"
-                  aria-label="Happy Face"
-                  icon={<FiSmile />}
-                />
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <Picker
-                  data={data}
-                  theme="light"
-                  onEmojiSelect={(data) => {
-                    setDescription(description + `${data.native}`);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
+            <EmojiPicker text={description} setText={setDescription} />
           </Box>
           <Textarea
             placeholder="Adding some words for yourself"
