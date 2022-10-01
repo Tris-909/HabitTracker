@@ -17,6 +17,7 @@ import {
   GoalChart,
   CreateStepModal,
   StepTable,
+  GoalSummary,
 } from "components";
 import { useStore, useGoalStore, useStepStore } from "state";
 import { MEDIA_QUERY } from "consts";
@@ -95,12 +96,15 @@ export const HomePage = () => {
                       display="flex"
                       justifyContent={"space-between"}
                       alignItems="center"
+                      mt="1rem"
                     >
-                      <CreateStepModal goal={currentDisplayGoal} />
+                      {/* <CreateStepModal goal={currentDisplayGoal} /> */}
+                      <GoalSummary goal={currentDisplayGoal} />
                       <CircularProgress
                         value={progress}
                         color="green.400"
                         thickness="5px"
+                        mr="1rem"
                         size="120px"
                       >
                         <CircularProgressLabel>

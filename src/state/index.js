@@ -105,7 +105,27 @@ export const useGoalStore = create((set, get) => ({
 }));
 
 export const useStepStore = create((set, get) => ({
-  steps: [],
+  steps: {},
+  goalInfo: {},
+  updateGoalInfo: ({ stepObj, goalId }) => {
+    const goalInfoObj = {
+      ...get().goalInfo,
+    };
+    const newTotalAmount = stepObj[goalId].reduce((total, step) => {
+      return total + Number(step.amount);
+    }, 0);
+    console.log("newTotalAmount", newTotalAmount);
+    const newTotalSteps = stepObj[goalId].length;
+    goalInfoObj[goalId] = {
+      ...get().goalInfo[goalId],
+      total: newTotalAmount,
+      steps: newTotalSteps,
+    };
+
+    set({
+      goalInfo: goalInfoObj,
+    });
+  },
   createStep: async ({ user, amount, description, goalId }) => {
     try {
       const { id, email } = user;
@@ -126,6 +146,10 @@ export const useStepStore = create((set, get) => ({
         ...get().steps,
       };
       stepObj[goalId] = [{ id: result.id, ...step }, ...get().steps[goalId]];
+      get().updateGoalInfo({
+        stepObj: stepObj,
+        goalId: goalId,
+      });
 
       set({
         steps: stepObj,
@@ -163,6 +187,10 @@ export const useStepStore = create((set, get) => ({
           ...get().steps,
         };
         stepObj[goalId] = steps;
+        get().updateGoalInfo({
+          stepObj: stepObj,
+          goalId: goalId,
+        });
 
         set({
           steps: stepObj,
@@ -196,6 +224,10 @@ export const useStepStore = create((set, get) => ({
         ...get().steps,
       };
       stepObj[goalId] = newStepsArr;
+      get().updateGoalInfo({
+        stepObj: stepObj,
+        goalId: goalId,
+      });
 
       set({
         steps: stepObj,
@@ -228,6 +260,10 @@ export const useStepStore = create((set, get) => ({
         ...get().steps,
       };
       stepObj[goalId] = newStepsArr;
+      get().updateGoalInfo({
+        stepObj: stepObj,
+        goalId: goalId,
+      });
 
       set({
         steps: stepObj,
@@ -248,7 +284,8 @@ export const useStepStore = create((set, get) => ({
   },
   clearStepsStore: () => {
     set({
-      steps: [],
+      steps: {},
+      goalInfo: {},
     });
   },
 }));
