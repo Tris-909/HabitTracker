@@ -31,6 +31,9 @@ export const GoalChart = ({
   setProgress: any;
 }) => {
   const steps = useStepStore((state) => state.steps);
+  const sortedSteps = steps.sort(
+    (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
+  );
   const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
 
   useEffect(() => {
@@ -58,11 +61,11 @@ export const GoalChart = ({
       tooltip: {
         callbacks: {
           title: (chart: any) => {
-            const sortedSteps = steps.sort(
-              (a: any, b: any) => a.createdAt.seconds > b.createdAt.seconds
-            );
-            return sortedSteps[chart[0].dataIndex - 1]?.description
-              ? sortedSteps[chart[0].dataIndex - 1]?.description
+            console.log("chart", chart);
+            return sortedSteps[sortedSteps.length - chart[0].dataIndex]
+              ?.description
+              ? sortedSteps[sortedSteps.length - chart[0].dataIndex]
+                  ?.description
               : "Starting Point";
           },
         },
@@ -72,9 +75,6 @@ export const GoalChart = ({
 
   const constuctLabels = () => {
     if (steps) {
-      const sortedSteps = steps.sort(
-        (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
-      );
       const labels = sortedSteps.map((step: any) => {
         return dayjs(dayjs.unix(step.createdAt.seconds)).format("DD/MM");
       });
@@ -84,9 +84,6 @@ export const GoalChart = ({
   };
   const constructData = () => {
     if (steps) {
-      const sortedSteps = steps.sort(
-        (a: any, b: any) => a.createdAt.seconds > b.createdAt.seconds
-      );
       const amountArray = sortedSteps.map((step: any, index: number) => {
         let currentAmount = 0;
         let start = 0;
@@ -104,11 +101,7 @@ export const GoalChart = ({
   };
   const constructIds = () => {
     if (steps) {
-      const sortedSteps = steps.sort(
-        (a: any, b: any) => a.createdAt.seconds > b.createdAt.seconds
-      );
       const stepIds = sortedSteps.map((step: any) => step.id);
-
       return stepIds;
     }
   };

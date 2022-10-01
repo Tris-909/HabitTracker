@@ -66,7 +66,7 @@ export const StepTable = () => {
   } = useTable(
     {
       columns: columns,
-      data: steps,
+      data: steps.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds),
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
