@@ -50,6 +50,7 @@ export const StepTable = () => {
     []
   );
   const steps = useStepStore((state) => state.steps);
+  console.log("steps", steps);
   const deleteStepById = useStepStore((state) => state.deleteStepById);
   const {
     getTableProps,

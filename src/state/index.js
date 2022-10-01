@@ -13,6 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { notify, notifyRules } from "components";
+import dayjs from "dayjs";
 
 export const useStore = create((set, get) => ({
   user: {},
@@ -95,8 +96,11 @@ export const useStepStore = create((set, get) => ({
       };
       const result = await addDoc(collection(db, "steps"), step);
 
+      // Try to get the current date for createdAt locally first since can't find a way to retrieve serverTimestamp without a request
+      step.createdAt.seconds = dayjs(dayjs()).unix();
+
       set({
-        steps: [...get().steps, { id: result.id, ...step }],
+        steps: [{ id: result.id, ...step }, ...get().steps],
       });
 
       notify({
