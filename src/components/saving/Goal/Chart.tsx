@@ -23,7 +23,13 @@ ChartJS.register(
   Legend
 );
 
-export const GoalChart = ({ goal }: { goal: any }) => {
+export const GoalChart = ({
+  goal,
+  setProgress,
+}: {
+  goal: any;
+  setProgress: any;
+}) => {
   const steps = useStepStore((state) => state.steps);
   const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
 
@@ -86,6 +92,8 @@ export const GoalChart = ({ goal }: { goal: any }) => {
         }
         return currentAmount;
       });
+
+      setProgress(amountArray[amountArray.length - 1] / goal.goal);
 
       return [0, ...amountArray];
     }

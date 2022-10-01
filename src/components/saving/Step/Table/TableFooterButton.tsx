@@ -1,5 +1,4 @@
 import { Tooltip, IconButton } from "@chakra-ui/react";
-import { IconType } from "react-icons";
 
 interface TableFooterButtonProps {
   tooltipMessage: string;

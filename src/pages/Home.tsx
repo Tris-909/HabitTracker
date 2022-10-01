@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuthState } from "initialization/firebase";
 import {
   Box,
@@ -8,6 +8,8 @@ import {
   Tab,
   TabPanel,
   useMediaQuery,
+  CircularProgress,
+  CircularProgressLabel,
 } from "@chakra-ui/react";
 import {
   NavBar,
@@ -22,6 +24,7 @@ import { MEDIA_QUERY } from "consts";
 export const HomePage = () => {
   const { user: authUser } = useAuthState();
   const user = useStore((state) => state.user);
+  const [progress, setProgress] = useState(0);
   const goals = useGoalStore((state) => state.goals);
   const fetchUser = useStore((state) => state.fetchUser);
   const fetchAllGoals = useGoalStore((state) => state.fetchAllGoals);
@@ -68,8 +71,25 @@ export const HomePage = () => {
                 {goals.map((goal: any) => {
                   return (
                     <TabPanel key={goal.id}>
-                      <CreateStepModal goal={goal} />
-                      <GoalChart goal={goal} />
+                      <Box
+                        display="flex"
+                        justifyContent={"space-between"}
+                        alignItems="center"
+                      >
+                        <CreateStepModal goal={goal} />
+                        <CircularProgress
+                          value={progress * 100}
+                          color="green.400"
+                          thickness="5px"
+                          size="120px"
+                        >
+                          <CircularProgressLabel>
+                            {progress * 100}%
+                          </CircularProgressLabel>
+                        </CircularProgress>
+                      </Box>
+
+                      <GoalChart goal={goal} setProgress={setProgress} />
                     </TabPanel>
                   );
                 })}
