@@ -39,8 +39,10 @@ export const HomePage = () => {
   }, [authUser?.email]);
 
   useEffect(() => {
-    fetchAllGoals({ userId: user?.id });
-  }, [user?.id]);
+    if (user?.id) {
+      fetchAllGoals({ userId: user.id });
+    }
+  }, [fetchAllGoals, user?.id]);
 
   useEffect(() => {
     setCurrentDisplayGoal(goals.length ? goals[0] : undefined);

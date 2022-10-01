@@ -84,6 +84,11 @@ export const SignInForm = ({
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              signInHandler();
+            }
+          }}
         />
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
         <GroupButtons
