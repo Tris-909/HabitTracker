@@ -94,7 +94,11 @@ export const GoalChart = ({
         return currentAmount;
       });
 
-      setProgress(amountArray[amountArray.length - 1] / goal.goal);
+      setProgress(
+        Math.round(
+          (amountArray[amountArray.length - 1] / goal.goal) * 100 * 10
+        ) / 10
+      );
 
       return [0, ...amountArray];
     }

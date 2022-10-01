@@ -78,13 +78,13 @@ export const HomePage = () => {
                       >
                         <CreateStepModal goal={goal} />
                         <CircularProgress
-                          value={progress * 100}
+                          value={progress}
                           color="green.400"
                           thickness="5px"
                           size="120px"
                         >
                           <CircularProgressLabel>
-                            {progress * 100}%
+                            {progress}%
                           </CircularProgressLabel>
                         </CircularProgress>
                       </Box>
