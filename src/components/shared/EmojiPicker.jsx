@@ -9,7 +9,7 @@ import { FiSmile } from "react-icons/fi";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
-export const EmojiPicker = ({ text, setText }) => {
+export const EmojiPicker = ({ text, setText, cursor }) => {
   return (
     <Popover>
       <PopoverTrigger>
@@ -25,8 +25,14 @@ export const EmojiPicker = ({ text, setText }) => {
         <Picker
           data={data}
           theme="light"
-          onEmojiSelect={(data) => {
-            setText(text + `${data.native}`);
+          onEmojiSelect={(emojiObject) => {
+            const { selectionStart, selectionEnd } = cursor.current;
+            const newTextWithEmoji =
+              text.slice(0, selectionStart) +
+              emojiObject.native +
+              text.slice(selectionEnd);
+
+            setText(newTextWithEmoji);
           }}
         />
       </PopoverContent>

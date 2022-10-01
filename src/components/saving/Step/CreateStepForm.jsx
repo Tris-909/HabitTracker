@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   FormControl,
   FormLabel,
@@ -7,14 +7,14 @@ import {
   Button,
   ModalBody,
   ModalFooter,
-  Textarea,
 } from "@chakra-ui/react";
 import { useStore, useStepStore } from "state";
-import { EmojiPicker } from "components/shared";
+import { EmojiPicker, TextAreaWithRef } from "components/shared";
 
 export const CreateStepForm = ({ goal, onClose }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
+  const ref = useRef(null);
   const user = useStore((state) => state.user);
   const createStep = useStepStore((state) => state.createStep);
 
@@ -49,9 +49,14 @@ export const CreateStepForm = ({ goal, onClose }) => {
             alignItems={"center"}
           >
             <FormLabel mt="1rem">Description</FormLabel>
-            <EmojiPicker text={description} setText={setDescription} />
+            <EmojiPicker
+              text={description}
+              setText={setDescription}
+              cursor={ref}
+            />
           </Box>
-          <Textarea
+          <TextAreaWithRef
+            ref={ref}
             placeholder="Adding some words for yourself"
             value={description}
             onChange={(event) => setDescription(event.target.value)}

@@ -1,24 +1,19 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
+  Box,
   FormControl,
   FormLabel,
   Input,
   Button,
   ModalBody,
   ModalFooter,
-  Textarea,
 } from "@chakra-ui/react";
 import { useStepStore } from "state";
+import { EmojiPicker, TextAreaWithRef } from "components/shared";
 
-export const EditStepForm = ({
-  step,
-  onClose,
-}: {
-  step: any;
-  onClose: () => void;
-}) => {
-  console.log("step", step);
+export const EditStepForm = ({ step, onClose }) => {
   const [amount, setAmount] = useState(step.amount);
+  const ref = useRef(null);
   const [description, setDescription] = useState(step.description);
   const updateStepId = useStepStore((state) => state.updateStepId);
 
@@ -42,11 +37,25 @@ export const EditStepForm = ({
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
           />
-          <FormLabel mt="1rem">Description</FormLabel>
-          <Textarea
+          <Box
+            display={"flex"}
+            justifyContent="space-between"
+            alignItems={"center"}
+          >
+            <FormLabel mt="1rem">Description</FormLabel>
+            <EmojiPicker
+              text={description}
+              setText={setDescription}
+              cursor={ref}
+            />
+          </Box>
+          <TextAreaWithRef
+            ref={ref}
             placeholder="Edit description for step"
             value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            onChange={(event) => {
+              setDescription(event.target.value);
+            }}
           />
         </FormControl>
       </ModalBody>
