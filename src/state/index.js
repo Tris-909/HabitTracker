@@ -49,6 +49,29 @@ export const useStore = create((set, get) => ({
 
 export const useGoalStore = create((set, get) => ({
   goals: [],
+  createGoal: async ({ user, title, amount, description }) => {
+    const { id, email } = user;
+    const goal = {
+      title: title,
+      goal: amount,
+      current: 0,
+      description: description,
+      parentId: id,
+      userId: id,
+      createdBy: email,
+      createdAt: serverTimestamp(),
+    };
+    const result = await addDoc(collection(db, "goals"), goal);
+
+    set({
+      goals: [...get().goals, { id: result.id, ...goal }],
+    });
+
+    notify({
+      notifyMessage: "Created a step succesfully.",
+      notifyRule: notifyRules.SUCCESS,
+    });
+  },
   fetchAllGoals: async ({ userId }) => {
     try {
       if (userId) {
@@ -76,7 +99,7 @@ export const useGoalStore = create((set, get) => ({
   },
   clearGoalsStore: () => {
     set({
-      goals: {},
+      goals: [],
     });
   },
 }));
@@ -99,8 +122,13 @@ export const useStepStore = create((set, get) => ({
       // Try to get the current date for createdAt locally first since can't find a way to retrieve serverTimestamp without a request
       step.createdAt.seconds = dayjs(dayjs()).unix();
 
+      const stepObj = {
+        ...get().steps,
+      };
+      stepObj[goalId] = [{ id: result.id, ...step }, ...get().steps[goalId]];
+
       set({
-        steps: [{ id: result.id, ...step }, ...get().steps],
+        steps: stepObj,
       });
 
       notify({
@@ -117,18 +145,31 @@ export const useStepStore = create((set, get) => ({
   },
   fetchStepsByGoalId: async ({ goalId }) => {
     try {
-      const queries = query(
-        collection(db, "steps"),
-        where("parentId", "==", goalId),
-        orderBy("createdAt", "desc")
-      );
-      const { docs } = await getDocs(queries);
-      const steps = docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const currentStepObj = get().steps;
 
-      set({ steps: steps });
+      if (goalId in currentStepObj === false) {
+        const queries = query(
+          collection(db, "steps"),
+          where("parentId", "==", goalId),
+          orderBy("createdAt", "desc")
+        );
+        const { docs } = await getDocs(queries);
+        const steps = docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const stepObj = {
+          ...get().steps,
+        };
+        stepObj[goalId] = steps;
+
+        set({
+          steps: stepObj,
+        });
+      } else {
+        console.error("Already fetched current goalId", goalId);
+      }
     } catch (error) {
       console.error("ERROR", error.message);
       notify({
@@ -138,9 +179,9 @@ export const useStepStore = create((set, get) => ({
       });
     }
   },
-  updateStepId: async ({ stepId, amount, description }) => {
+  updateStepId: async ({ stepId, goalId, amount, description }) => {
     try {
-      const newStepsArr = get().steps.map((step) => {
+      const newStepsArr = get().steps[goalId].map((step) => {
         if (step.id === stepId) {
           return {
             ...step,
@@ -150,8 +191,14 @@ export const useStepStore = create((set, get) => ({
         }
         return step;
       });
+
+      const stepObj = {
+        ...get().steps,
+      };
+      stepObj[goalId] = newStepsArr;
+
       set({
-        steps: newStepsArr,
+        steps: stepObj,
       });
 
       await updateDoc(doc(db, "steps", stepId), {
@@ -171,11 +218,19 @@ export const useStepStore = create((set, get) => ({
       });
     }
   },
-  deleteStepById: async ({ stepId }) => {
+  deleteStepById: async ({ stepId, goalId }) => {
     try {
-      const newStepsArr = get().steps.filter((step) => step.id !== stepId);
+      const newStepsArr = get().steps[goalId].filter(
+        (step) => step.id !== stepId
+      );
+
+      const stepObj = {
+        ...get().steps,
+      };
+      stepObj[goalId] = newStepsArr;
+
       set({
-        steps: newStepsArr,
+        steps: stepObj,
       });
 
       await deleteDoc(doc(db, "steps", stepId));
@@ -193,7 +248,7 @@ export const useStepStore = create((set, get) => ({
   },
   clearStepsStore: () => {
     set({
-      goals: {},
+      steps: [],
     });
   },
 }));

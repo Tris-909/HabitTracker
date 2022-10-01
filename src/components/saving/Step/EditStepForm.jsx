@@ -11,14 +11,19 @@ import {
 import { useStepStore } from "state";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
 
-export const EditStepForm = ({ step, onClose }) => {
+export const EditStepForm = ({ step, goal, onClose }) => {
   const [amount, setAmount] = useState(step.amount);
   const ref = useRef(null);
   const [description, setDescription] = useState(step.description);
   const updateStepId = useStepStore((state) => state.updateStepId);
 
   const createHandler = async () => {
-    await updateStepId({ stepId: step.id, amount, description });
+    await updateStepId({
+      stepId: step.id,
+      amount,
+      description,
+      goalId: goal.id,
+    });
     resetForm();
   };
 

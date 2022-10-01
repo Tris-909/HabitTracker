@@ -9,7 +9,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useEffect } from "react";
 import { useStepStore } from "state";
 import dayjs from "dayjs";
 
@@ -31,16 +30,11 @@ export const GoalChart = ({
   setProgress: any;
 }) => {
   const steps = useStepStore((state) => state.steps);
-  const sortedSteps = steps.sort(
-    (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
-  );
-  const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
-
-  useEffect(() => {
-    if (!steps?.legnth) {
-      fetchStepsByGoalId({ goalId: goal.id });
-    }
-  }, [goal.id]);
+  const sortedSteps = steps[goal?.id]
+    ? steps[goal?.id].sort(
+        (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
+      )
+    : [];
 
   const options = {
     responsive: true,
@@ -56,12 +50,11 @@ export const GoalChart = ({
         font: {
           size: 30,
         },
-        text: goal.description,
+        text: goal?.description,
       },
       tooltip: {
         callbacks: {
           title: (chart: any) => {
-            console.log("chart", chart);
             return sortedSteps[sortedSteps.length - chart[0].dataIndex]
               ?.description
               ? sortedSteps[sortedSteps.length - chart[0].dataIndex]
@@ -94,11 +87,15 @@ export const GoalChart = ({
         return currentAmount;
       });
 
-      setProgress(
-        Math.round(
-          (amountArray[amountArray.length - 1] / goal.goal) * 100 * 10
-        ) / 10
-      );
+      if (amountArray[amountArray.length - 1]) {
+        setProgress(
+          Math.round(
+            (amountArray[amountArray.length - 1] / goal?.goal) * 100 * 10
+          ) / 10
+        );
+      } else {
+        setProgress(0);
+      }
 
       return [0, ...amountArray];
     }
@@ -106,6 +103,7 @@ export const GoalChart = ({
   const constructIds = () => {
     if (steps) {
       const stepIds = sortedSteps.map((step: any) => step.id);
+
       return stepIds;
     }
   };

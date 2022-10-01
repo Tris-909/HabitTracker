@@ -27,7 +27,7 @@ import { EditStepModal } from "../EditStepModal";
 import { TableFooterButton } from "./TableFooterButton";
 import { MEDIA_QUERY } from "consts";
 
-export const StepTable = () => {
+export const StepTable = ({ goal }) => {
   const columns = useMemo(
     () => [
       {
@@ -50,7 +50,7 @@ export const StepTable = () => {
     []
   );
   const steps = useStepStore((state) => state.steps);
-  console.log("steps", steps);
+  const stepsForCurrentGoal = steps[goal?.id] ? steps[goal?.id] : [];
   const deleteStepById = useStepStore((state) => state.deleteStepById);
   const {
     getTableProps,
@@ -67,7 +67,11 @@ export const StepTable = () => {
   } = useTable(
     {
       columns: columns,
-      data: steps.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds),
+      data: stepsForCurrentGoal.sort(
+        (a, b) => b.createdAt.seconds - a.createdAt.seconds
+      ),
+      autoResetPage: false,
+      autoResetSortBy: false,
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
@@ -80,7 +84,9 @@ export const StepTable = () => {
     if (header === "Date") {
       return dayjs(dayjs.unix(cell.value)).format("DD/MM/YYYY");
     } else if (header === "Action") {
-      const currentStep = steps.filter((step) => step.id === cell.value)[0];
+      const currentStep = stepsForCurrentGoal.filter(
+        (step) => step.id === cell.value
+      )[0];
 
       return (
         <Box
@@ -89,7 +95,7 @@ export const StepTable = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <EditStepModal step={currentStep} />
+          <EditStepModal step={currentStep} goal={goal} />
           <Button
             mt="0.5rem"
             bg="#ff3034"
@@ -126,7 +132,7 @@ export const StepTable = () => {
   };
 
   const deleteStepHandler = async (stepId) => {
-    await deleteStepById({ stepId: stepId });
+    await deleteStepById({ stepId: stepId, goalId: goal?.id });
   };
 
   return (
@@ -180,7 +186,7 @@ export const StepTable = () => {
       >
         {isDesktop ? (
           <Box position="absolute" right="2%">
-            Total : {steps.length}
+            Total : {stepsForCurrentGoal.length}
           </Box>
         ) : null}
 
