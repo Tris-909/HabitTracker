@@ -7,24 +7,31 @@ import {
   Button,
   ModalBody,
   ModalFooter,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useStepStore } from "state";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
 
 export const EditStepForm = ({ step, goal, onClose }) => {
-  const [amount, setAmount] = useState(step.amount);
   const ref = useRef(null);
+  const [amount, setAmount] = useState(step.amount);
   const [description, setDescription] = useState(step.description);
+  const [error, setError] = useState("");
   const updateStepId = useStepStore((state) => state.updateStepId);
 
   const createHandler = async () => {
-    await updateStepId({
-      stepId: step.id,
-      amount,
-      description,
-      goalId: goal.id,
-    });
-    resetForm();
+    if (amount && description) {
+      await updateStepId({
+        stepId: step.id,
+        amount,
+        description,
+        goalId: goal.id,
+      });
+      resetForm();
+      onClose();
+    } else {
+      setError("All fields are required");
+    }
   };
 
   const resetForm = () => {
@@ -35,11 +42,12 @@ export const EditStepForm = ({ step, goal, onClose }) => {
   return (
     <>
       <ModalBody>
-        <FormControl>
+        <FormControl isInvalid={error ? true : false}>
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
             value={amount}
+            isInvalid={!amount && error}
             onChange={(event) => setAmount(event.target.value)}
           />
           <Box
@@ -61,7 +69,9 @@ export const EditStepForm = ({ step, goal, onClose }) => {
             onChange={(event) => {
               setDescription(event.target.value);
             }}
+            isInvalid={!description && error}
           />
+          {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </FormControl>
       </ModalBody>
       <ModalFooter>
@@ -84,7 +94,6 @@ export const EditStepForm = ({ step, goal, onClose }) => {
           }}
           onClick={() => {
             createHandler();
-            onClose();
           }}
         >
           Edit

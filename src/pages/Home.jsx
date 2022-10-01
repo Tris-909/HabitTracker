@@ -73,7 +73,7 @@ export const HomePage = () => {
         justifyContent={isDesktop ? "space-around" : "initial"}
       >
         <Box bg="white" w={isDesktop ? "40%" : "90%"} height="fit-content">
-          {goals ? (
+          {goals && (
             <Tabs>
               <TabList>
                 {goals.map((goal) => {
@@ -89,7 +89,7 @@ export const HomePage = () => {
               </TabList>
 
               <TabPanels>
-                {currentDisplayGoal && (
+                {currentDisplayGoal ? (
                   <>
                     <Box
                       display="flex"
@@ -114,11 +114,11 @@ export const HomePage = () => {
                       setProgress={setProgress}
                     />
                   </>
+                ) : (
+                  <Skeleton height="450px" />
                 )}
               </TabPanels>
             </Tabs>
-          ) : (
-            <Skeleton height="450px" />
           )}
         </Box>
         <Box w={isDesktop ? "50%" : "90%"} mt={isDesktop ? "0rem" : "2rem"}>

@@ -47,18 +47,21 @@ export const CreateGoalForm = ({ onClose }: { onClose: () => void }) => {
           <Input
             type="string"
             value={title}
+            isInvalid={!title && error.length !== 0}
             onChange={(event) => setTitle(event.target.value)}
           />
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
             value={amount}
+            isInvalid={!amount && error.length !== 0}
             onChange={(event) => setAmount(event.target.value)}
           />
           <FormLabel>Description</FormLabel>
           <Input
             type="string"
             value={description}
+            isInvalid={!description && error.length !== 0}
             onChange={(event) => setDescription(event.target.value)}
           />
           {error && <FormErrorMessage>{error}</FormErrorMessage>}

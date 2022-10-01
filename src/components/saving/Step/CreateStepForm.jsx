@@ -7,6 +7,7 @@ import {
   Button,
   ModalBody,
   ModalFooter,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useStore, useStepStore } from "state";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
@@ -14,18 +15,24 @@ import { EmojiPicker, TextAreaWithRef } from "components/shared";
 export const CreateStepForm = ({ goal, onClose }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
   const ref = useRef(null);
   const user = useStore((state) => state.user);
   const createStep = useStepStore((state) => state.createStep);
 
   const createHandler = async () => {
-    createStep({
-      amount: amount,
-      description: description,
-      goalId: goal.id,
-      user: user,
-    });
-    resetForm();
+    if (amount && description) {
+      createStep({
+        amount: amount,
+        description: description,
+        goalId: goal.id,
+        user: user,
+      });
+      resetForm();
+      onClose();
+    } else {
+      setError("All fields are required");
+    }
   };
 
   const resetForm = () => {
@@ -36,11 +43,12 @@ export const CreateStepForm = ({ goal, onClose }) => {
   return (
     <>
       <ModalBody>
-        <FormControl>
+        <FormControl isInvalid={error ? true : false}>
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
             value={amount}
+            isInvalid={!amount && error}
             onChange={(event) => setAmount(event.target.value)}
           />
           <Box
@@ -51,6 +59,7 @@ export const CreateStepForm = ({ goal, onClose }) => {
             <FormLabel mt="1rem">Description</FormLabel>
             <EmojiPicker
               text={description}
+              isInvalid={!description && error}
               setText={setDescription}
               cursor={ref}
             />
@@ -61,6 +70,7 @@ export const CreateStepForm = ({ goal, onClose }) => {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
+          {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </FormControl>
       </ModalBody>
       <ModalFooter>
@@ -83,7 +93,6 @@ export const CreateStepForm = ({ goal, onClose }) => {
           }}
           onClick={() => {
             createHandler();
-            onClose();
           }}
         >
           Create
