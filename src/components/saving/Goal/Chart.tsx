@@ -72,9 +72,13 @@ export const GoalChart = ({
 
   const constuctLabels = () => {
     if (steps) {
-      const labels = steps.map((step: any) =>
-        dayjs(step.createdAt.seconds).format("DD/M")
+      const sortedSteps = steps.sort(
+        (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
       );
+      const labels = sortedSteps.map((step: any) => {
+        return dayjs(dayjs.unix(step.createdAt.seconds)).format("DD/MM");
+      });
+
       return ["0", ...labels];
     }
   };

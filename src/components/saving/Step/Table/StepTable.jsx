@@ -77,7 +77,7 @@ export const StepTable = () => {
 
   const renderCellComponent = (header, cell) => {
     if (header === "Date") {
-      return dayjs(cell.value).format("DD/M");
+      return dayjs(dayjs.unix(cell.value)).format("DD/MM/YYYY");
     } else if (header === "Action") {
       const currentStep = steps.filter((step) => step.id === cell.value)[0];
 

@@ -119,7 +119,6 @@ export const useStepStore = create((set, get) => ({
         orderBy("createdAt", "desc")
       );
       const { docs } = await getDocs(queries);
-      console.log("doics", docs);
       const steps = docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
