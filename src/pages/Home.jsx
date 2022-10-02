@@ -10,6 +10,7 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Skeleton,
+  Heading,
 } from "@chakra-ui/react";
 import {
   NavBar,
@@ -18,6 +19,7 @@ import {
   CreateStepModal,
   StepTable,
   GoalSummary,
+  GoalOptions,
 } from "components";
 import { useStore, useGoalStore, useStepStore } from "state";
 import { MEDIA_QUERY } from "consts";
@@ -96,13 +98,24 @@ export const HomePage = () => {
                 {currentDisplayGoal ? (
                   <>
                     <Box
+                      display={"flex"}
+                      justifyContent="space-between"
+                      mt="0.5rem"
+                      mr="0.5rem"
+                    >
+                      <Heading as="h5" ml="1rem">
+                        {currentDisplayGoal.description}
+                      </Heading>
+                      <GoalOptions goal={currentDisplayGoal} />
+                    </Box>
+                    <Box
                       display="flex"
                       flexDir={isMobile ? "column" : "row"}
                       justifyContent={"space-between"}
                       alignItems="center"
                       mt="1rem"
+                      mb="1rem"
                     >
-                      {/* <CreateStepModal goal={currentDisplayGoal} /> */}
                       <GoalSummary goal={currentDisplayGoal} />
                       <CircularProgress
                         value={progress}

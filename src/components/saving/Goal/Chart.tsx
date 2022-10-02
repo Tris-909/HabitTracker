@@ -45,13 +45,6 @@ export const GoalChart = ({
       label: {
         display: false,
       },
-      title: {
-        display: true,
-        font: {
-          size: 30,
-        },
-        text: goal?.description,
-      },
       tooltip: {
         callbacks: {
           title: (chart: any) => {
