@@ -45,8 +45,13 @@ export const DeleteGoal = ({ goalId }) => {
               </Highlight>
             </Box>
             <Box mt="2rem">
-              Once you delete it, you can't get it back. We don't keep a copy of
-              it anywhere.
+              <Highlight
+                query="delete"
+                styles={{ px: "0.5", py: "0.5", bg: "#f5425a" }}
+              >
+                Once you delete it, you can't get it back. We don't keep a copy
+                of it anywhere.
+              </Highlight>
             </Box>
           </ModalBody>
 
