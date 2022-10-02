@@ -14,25 +14,26 @@ import {
 } from "@chakra-ui/react";
 import {
   NavBar,
-  CreateGoalModal,
   GoalChart,
   StepTable,
   GoalSummary,
   GoalOptions,
   HomeBackground,
+  CustomSpinner,
 } from "components";
 import { useStore, useGoalStore, useStepStore } from "state";
 import { MEDIA_QUERY } from "consts";
 
 export const HomePage = () => {
   const { user: authUser } = useAuthState();
-  const [currentDisplayGoal, setCurrentDisplayGoal] = useState(undefined);
   const user = useStore((state) => state.user);
   const goals = useGoalStore((state) => state.goals);
   const goalInfo = useStepStore((state) => state.goalInfo);
+  const isLoadingGoal = useGoalStore((state) => state.isLoadingGoal);
   const fetchUser = useStore((state) => state.fetchUser);
   const fetchAllGoals = useGoalStore((state) => state.fetchAllGoals);
   const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
+  const [currentDisplayGoal, setCurrentDisplayGoal] = useState(undefined);
   const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`, {
     ssr: false,
   });
@@ -51,7 +52,9 @@ export const HomePage = () => {
   }, [fetchAllGoals, user?.id]);
 
   useEffect(() => {
-    setCurrentDisplayGoal(goals.length ? goals[0] : undefined);
+    if (goals) {
+      setCurrentDisplayGoal(goals.length > 0 ? goals[0] : undefined);
+    }
   }, [goals]);
 
   useEffect(() => {
@@ -69,7 +72,6 @@ export const HomePage = () => {
   return (
     <Box bg="#212121" minHeight={"100vh"}>
       <NavBar />
-      <CreateGoalModal />
       <Box
         w="100%"
         mt="2rem"
@@ -78,7 +80,9 @@ export const HomePage = () => {
         alignItems={isDesktop ? "initial" : "center"}
         justifyContent={isDesktop ? "space-around" : "center"}
       >
-        {currentDisplayGoal ? (
+        {isLoadingGoal ? (
+          <CustomSpinner />
+        ) : goals.length > 0 ? (
           <>
             <Box bg="white" w={isDesktop ? "40%" : "90%"} height="fit-content">
               <Tabs>

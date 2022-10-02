@@ -49,6 +49,7 @@ export const useStore = create((set, get) => ({
 
 export const useGoalStore = create((set, get) => ({
   goals: [],
+  isLoadingGoal: true,
   createGoal: async ({ user, title, amount, description }) => {
     const { id, email } = user;
     const goal = {
@@ -75,6 +76,9 @@ export const useGoalStore = create((set, get) => ({
   fetchAllGoals: async ({ userId }) => {
     try {
       if (userId) {
+        set({
+          isLoadingGoal: true,
+        });
         const queries = query(
           collection(db, "goals"),
           where("parentId", "==", userId)
@@ -88,6 +92,9 @@ export const useGoalStore = create((set, get) => ({
         });
 
         set({ goals: savingGoals });
+        set({
+          isLoadingGoal: false,
+        });
       }
     } catch (error) {
       console.error("ERROR", error.message);
