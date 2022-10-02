@@ -16,7 +16,6 @@ import {
   NavBar,
   CreateGoalModal,
   GoalChart,
-  CreateStepModal,
   StepTable,
   GoalSummary,
   GoalOptions,
@@ -79,7 +78,7 @@ export const HomePage = () => {
         justifyContent={isDesktop ? "space-around" : "initial"}
       >
         <Box bg="white" w={isDesktop ? "40%" : "90%"} height="fit-content">
-          {goals && (
+          {currentDisplayGoal && (
             <Tabs>
               <TabList>
                 {goals.map((goal) => {
@@ -95,7 +94,7 @@ export const HomePage = () => {
               </TabList>
 
               <TabPanels>
-                {currentDisplayGoal ? (
+                {currentDisplayGoal?.id ? (
                   <>
                     <Box
                       display={"flex"}

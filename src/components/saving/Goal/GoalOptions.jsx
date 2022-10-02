@@ -1,12 +1,6 @@
 import { FiChevronDown } from "react-icons/fi";
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
-} from "@chakra-ui/react";
-import { CreateStepModal } from "components";
+import { Menu, MenuButton, MenuList, IconButton } from "@chakra-ui/react";
+import { CreateStepModal, EditGoalModal } from "components";
 
 export const GoalOptions = ({ goal }) => {
   return (
@@ -27,7 +21,7 @@ export const GoalOptions = ({ goal }) => {
         fontSize="30px"
       />
       <MenuList>
-        <MenuItem>Edit Goal</MenuItem>
+        <EditGoalModal goal={goal} />
         <CreateStepModal goal={goal} />
       </MenuList>
     </Menu>

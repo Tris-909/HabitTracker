@@ -97,6 +97,43 @@ export const useGoalStore = create((set, get) => ({
       });
     }
   },
+  editGoal: async ({ title, amount, description, goalId }) => {
+    try {
+      const newGoalArr = get().goals.map((goal) => {
+        if (goal.id === goalId) {
+          return {
+            ...goal,
+            title: title,
+            goal: amount,
+            description: description,
+          };
+        } else {
+          return goal;
+        }
+      });
+
+      set({
+        goals: newGoalArr,
+      });
+
+      await updateDoc(doc(db, "goals", goalId), {
+        title: title,
+        goal: amount,
+        description: description,
+      });
+
+      notify({
+        notifyMessage: "Update a step succesfully.",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to update a step, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
   clearGoalsStore: () => {
     set({
       goals: [],

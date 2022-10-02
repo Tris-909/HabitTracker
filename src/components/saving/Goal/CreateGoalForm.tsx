@@ -10,22 +10,41 @@ import {
 } from "@chakra-ui/react";
 import { useStore, useGoalStore } from "state";
 
-export const CreateGoalForm = ({ onClose }: { onClose: () => void }) => {
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+export const CreateGoalForm = ({
+  goal,
+  state,
+  onClose,
+}: {
+  goal?: any;
+  state: string;
+  onClose: () => void;
+}) => {
+  const [title, setTitle] = useState(goal?.title);
+  const [amount, setAmount] = useState(goal?.goal);
+  const [description, setDescription] = useState(goal?.description);
   const [error, setError] = useState("");
   const user = useStore((state) => state.user);
   const createGoal = useGoalStore((state) => state.createGoal);
+  const editGoal = useGoalStore((state) => state.editGoal);
 
-  const createSavingGoal = async () => {
+  const onSubmitHandler = async () => {
     if (title && amount && description) {
-      createGoal({
-        user: user,
-        title: title,
-        amount: +amount,
-        description: description,
-      });
+      if (state === "Create") {
+        createGoal({
+          user: user,
+          title: title,
+          amount: +amount,
+          description: description,
+        });
+      } else {
+        editGoal({
+          goalId: goal?.id,
+          title: title,
+          amount: +amount,
+          description: description,
+        });
+      }
+
       onClose();
       resetForm();
     } else {
@@ -86,7 +105,7 @@ export const CreateGoalForm = ({ onClose }: { onClose: () => void }) => {
             bg: "#484848",
           }}
           onClick={() => {
-            createSavingGoal();
+            onSubmitHandler();
           }}
         >
           Create

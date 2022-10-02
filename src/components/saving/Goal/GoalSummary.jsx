@@ -26,7 +26,7 @@ export const GoalSummary = ({ goal }) => {
         >
           Goal:
         </Highlight>
-        {` `} {goal.goal}
+        {` `} {goal?.goal}
       </Heading>
       <Heading as="h4" size="sm" mb="1rem">
         <Highlight
@@ -55,7 +55,7 @@ export const GoalSummary = ({ goal }) => {
           Started from:
         </Highlight>
         {` `}
-        {dayjs(dayjs.unix(goal.createdAt.seconds)).format("DD/MM/YYYY")}
+        {dayjs(dayjs.unix(goal?.createdAt.seconds)).format("DD/MM/YYYY")}
       </Heading>
     </Box>
   );

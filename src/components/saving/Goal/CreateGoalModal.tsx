@@ -22,7 +22,7 @@ export const CreateGoalModal = () => {
       <SharedModal
         isOpen={isOpen}
         onClose={onClose}
-        modalForm={<CreateGoalForm onClose={onClose} />}
+        modalForm={<CreateGoalForm onClose={onClose} state="Create" />}
         modalTitle="Create Saving Goal"
       />
     </Box>
