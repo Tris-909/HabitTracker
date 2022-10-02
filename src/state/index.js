@@ -107,7 +107,8 @@ export const useGoalStore = create((set, get) => ({
 export const useStepStore = create((set, get) => ({
   steps: {},
   goalInfo: {},
-  updateGoalInfo: ({ stepObj, goalId }) => {
+  updateGoalInfo: ({ stepObj, goal }) => {
+    const goalId = goal.id;
     const goalInfoObj = {
       ...get().goalInfo,
     };
@@ -119,14 +120,19 @@ export const useStepStore = create((set, get) => ({
       ...get().goalInfo[goalId],
       total: newTotalAmount,
       steps: newTotalSteps,
+      progress:
+        newTotalAmount !== 0
+          ? Math.round((newTotalAmount / goal?.goal) * 100 * 10) / 10
+          : 0,
     };
 
     set({
       goalInfo: goalInfoObj,
     });
   },
-  createStep: async ({ user, amount, description, goalId }) => {
+  createStep: async ({ user, amount, description, goal }) => {
     try {
+      const goalId = goal.id;
       const { id, email } = user;
       const step = {
         amount: amount,
@@ -147,7 +153,7 @@ export const useStepStore = create((set, get) => ({
       stepObj[goalId] = [{ id: result.id, ...step }, ...get().steps[goalId]];
       get().updateGoalInfo({
         stepObj: stepObj,
-        goalId: goalId,
+        goal: goal,
       });
 
       set({
@@ -166,8 +172,9 @@ export const useStepStore = create((set, get) => ({
       });
     }
   },
-  fetchStepsByGoalId: async ({ goalId }) => {
+  fetchStepsByGoalId: async ({ goal }) => {
     try {
+      const goalId = goal.id;
       const currentStepObj = get().steps;
 
       if (goalId in currentStepObj === false) {
@@ -188,7 +195,7 @@ export const useStepStore = create((set, get) => ({
         stepObj[goalId] = steps;
         get().updateGoalInfo({
           stepObj: stepObj,
-          goalId: goalId,
+          goal: goal,
         });
 
         set({

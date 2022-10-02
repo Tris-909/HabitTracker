@@ -25,7 +25,7 @@ export const CreateStepForm = ({ goal, onClose }) => {
       createStep({
         amount: amount,
         description: description,
-        goalId: goal.id,
+        goal: goal,
         user: user,
       });
       resetForm();

@@ -22,13 +22,7 @@ ChartJS.register(
   Legend
 );
 
-export const GoalChart = ({
-  goal,
-  setProgress,
-}: {
-  goal: any;
-  setProgress: any;
-}) => {
+export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
   const steps = useStepStore((state) => state.steps);
   const sortedSteps = steps[goal?.id]
     ? steps[goal?.id].sort(
@@ -70,27 +64,51 @@ export const GoalChart = ({
       return ["0", ...labels];
     }
   };
-  const constructData = () => {
+
+  const constructDataV2 = (type: string) => {
     if (steps) {
       const amountArray = sortedSteps.map((step: any, index: number) => {
-        let currentAmount = 0;
-        let start = 0;
-        while (start <= index && index <= sortedSteps.length - 1) {
-          currentAmount = currentAmount + sortedSteps[start].amount * 1;
-          start++;
-        }
-        return currentAmount;
-      });
+        if (type === "Earn") {
+          if (Math.sign(step.amount) === -1) {
+            return null;
+          }
+          const currentArr = sortedSteps.slice(0, index + 1);
+          const currentTotalAmount = currentArr.reduce(
+            (total: number, step: any) => {
+              return (total += step?.amount * 1);
+            },
+            0
+          );
 
-      if (amountArray[amountArray.length - 1]) {
-        setProgress(
-          Math.round(
-            (amountArray[amountArray.length - 1] / goal?.goal) * 100 * 10
-          ) / 10
-        );
-      } else {
-        setProgress(0);
-      }
+          return currentTotalAmount;
+        } else {
+          const nextStepOfLoss = sortedSteps[index + 1]?.amount;
+          if (nextStepOfLoss && Math.sign(nextStepOfLoss) === -1) {
+            const currentArr = sortedSteps.slice(0, index + 1);
+            const currentTotalAmount = currentArr.reduce(
+              (total: number, step: any) => {
+                return (total += step.amount * 1);
+              },
+              0
+            );
+            return currentTotalAmount;
+          }
+
+          if (Math.sign(step.amount) === 1) {
+            return null;
+          }
+
+          const currentArr = sortedSteps.slice(0, index + 1);
+          const currentTotalAmount = currentArr.reduce(
+            (total: number, step: any) => {
+              return (total += step.amount * 1);
+            },
+            0
+          );
+
+          return currentTotalAmount;
+        }
+      });
 
       return [0, ...amountArray];
     }
@@ -108,10 +126,18 @@ export const GoalChart = ({
     labels,
     datasets: [
       {
-        label: "Steps",
-        data: constructData(),
-        borderColor: "rgba(93, 93, 93, 0.8)",
-        backgroundColor: "rgba(93, 93, 93, 0.8)",
+        label: "Earn",
+        data: constructDataV2("Earn"),
+        borderColor: "#1df024",
+        backgroundColor: "#1df024",
+        pointRadius: 3,
+        ids: constructIds(),
+      },
+      {
+        label: "Loss",
+        data: constructDataV2("Loss"),
+        borderColor: "#f70c30",
+        backgroundColor: "#f70c30",
         pointRadius: 3,
         ids: constructIds(),
       },

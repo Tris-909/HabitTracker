@@ -6,7 +6,7 @@ export const NavBar = () => {
   return (
     <Box
       w="100%"
-      bg={"#484848"}
+      bg={"#121010"}
       h="10vh"
       mb="2rem"
       display="flex"

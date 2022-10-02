@@ -26,10 +26,10 @@ import { MEDIA_QUERY } from "consts";
 
 export const HomePage = () => {
   const { user: authUser } = useAuthState();
-  const [progress, setProgress] = useState(0);
   const [currentDisplayGoal, setCurrentDisplayGoal] = useState(undefined);
   const user = useStore((state) => state.user);
   const goals = useGoalStore((state) => state.goals);
+  const goalInfo = useStepStore((state) => state.goalInfo);
   const fetchUser = useStore((state) => state.fetchUser);
   const fetchAllGoals = useGoalStore((state) => state.fetchAllGoals);
   const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
@@ -56,7 +56,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     if (currentDisplayGoal) {
-      fetchStepsByGoalId({ goalId: currentDisplayGoal?.id });
+      fetchStepsByGoalId({ goal: currentDisplayGoal });
     }
   }, [currentDisplayGoal?.id]);
 
@@ -118,22 +118,19 @@ export const HomePage = () => {
                     >
                       <GoalSummary goal={currentDisplayGoal} />
                       <CircularProgress
-                        value={progress}
+                        value={goalInfo[currentDisplayGoal.id]?.progress}
                         color="green.400"
                         thickness="5px"
                         mr="1rem"
                         size={isMobile ? "200px" : "150px"}
                       >
                         <CircularProgressLabel>
-                          {progress}%
+                          {goalInfo[currentDisplayGoal.id]?.progress}%
                         </CircularProgressLabel>
                       </CircularProgress>
                     </Box>
 
-                    <GoalChart
-                      goal={currentDisplayGoal}
-                      setProgress={setProgress}
-                    />
+                    <GoalChart goal={currentDisplayGoal} />
                   </>
                 ) : (
                   <Skeleton height="450px" />
