@@ -134,6 +134,24 @@ export const useGoalStore = create((set, get) => ({
       });
     }
   },
+  deleteGoal: async ({ goalId, steps }) => {
+    const newGoalArr = get().goals.filter((goal) => goal.id !== goalId);
+
+    set({
+      goals: newGoalArr,
+    });
+
+    notify({
+      notifyMessage: "Delete Goal successfully",
+      notifyRule: notifyRules.SUCCESS,
+    });
+
+    await deleteDoc(doc(db, "goals", goalId));
+
+    for (const step of steps) {
+      await deleteDoc(doc(db, "steps", step.id));
+    }
+  },
   clearGoalsStore: () => {
     set({
       goals: [],
