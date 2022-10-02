@@ -1,9 +1,13 @@
-import { Box, Heading, Highlight } from "@chakra-ui/react";
+import { Box, Heading, Highlight, useMediaQuery } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { useStepStore } from "state";
+import { MEDIA_QUERY } from "consts";
 
 export const GoalSummary = ({ goal }) => {
   const goalInfo = useStepStore((state) => state.goalInfo);
+  const [isMobile] = useMediaQuery(`(max-width: ${MEDIA_QUERY.MOBILE})`, {
+    ssr: false,
+  });
 
   return (
     <Box
@@ -12,6 +16,8 @@ export const GoalSummary = ({ goal }) => {
       border="2px solid #d9d5d2"
       p="1rem"
       ml="1rem"
+      mr={isMobile ? "1rem" : "0rem"}
+      w={isMobile ? "90%" : "initial"}
     >
       <Heading as="h4" size="sm" mb="1rem">
         <Highlight

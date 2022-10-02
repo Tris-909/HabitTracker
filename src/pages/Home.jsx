@@ -34,6 +34,9 @@ export const HomePage = () => {
   const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`, {
     ssr: false,
   });
+  const [isMobile] = useMediaQuery(`(max-width: ${MEDIA_QUERY.MOBILE})`, {
+    ssr: false,
+  });
 
   useEffect(() => {
     initializeUser(authUser?.email);
@@ -94,6 +97,7 @@ export const HomePage = () => {
                   <>
                     <Box
                       display="flex"
+                      flexDir={isMobile ? "column" : "row"}
                       justifyContent={"space-between"}
                       alignItems="center"
                       mt="1rem"
@@ -105,7 +109,7 @@ export const HomePage = () => {
                         color="green.400"
                         thickness="5px"
                         mr="1rem"
-                        size="120px"
+                        size={isMobile ? "200px" : "150px"}
                       >
                         <CircularProgressLabel>
                           {progress}%
