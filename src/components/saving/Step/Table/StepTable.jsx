@@ -147,7 +147,7 @@ export const StepTable = ({ goal }) => {
           pt="0"
           placement="top"
         >
-          Your Progress :
+          Your Progress
         </TableCaption>
         <Thead>
           <Tr>

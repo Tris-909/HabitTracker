@@ -69,6 +69,18 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     if (steps) {
       const amountArray = sortedSteps.map((step: any, index: number) => {
         if (type === "Earn") {
+          const nextStepOfEarn = sortedSteps[index + 1]?.amount;
+          if (nextStepOfEarn && Math.sign(nextStepOfEarn) === 1) {
+            const currentArr = sortedSteps.slice(0, index + 1);
+            const currentTotalAmount = currentArr.reduce(
+              (total: number, step: any) => {
+                return (total += step.amount * 1);
+              },
+              0
+            );
+            return currentTotalAmount;
+          }
+
           if (Math.sign(step.amount) === -1) {
             return null;
           }
