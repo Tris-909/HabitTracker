@@ -114,7 +114,6 @@ export const useStepStore = create((set, get) => ({
     const newTotalAmount = stepObj[goalId].reduce((total, step) => {
       return total + Number(step.amount);
     }, 0);
-    console.log("newTotalAmount", newTotalAmount);
     const newTotalSteps = stepObj[goalId].length;
     goalInfoObj[goalId] = {
       ...get().goalInfo[goalId],
