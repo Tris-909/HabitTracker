@@ -39,13 +39,13 @@ export const GoalSummary = ({ goal }) => {
       </Heading>
       <Heading as="h4" size="sm" mb="1rem">
         <Highlight
-          query="Total Steps Added:"
-          styles={{ px: "2", py: "1", rounded: "full", bg: "#d078f0" }}
+          query="Loss:"
+          styles={{ px: "2", py: "1", rounded: "full", bg: "#f70c30" }}
         >
-          Total Steps Added:
+          Loss:
         </Highlight>
         {` `}
-        {goalInfo[goal.id]?.steps}
+        {goalInfo[goal.id]?.loss}
       </Heading>
       <Heading as="h4" size="sm">
         <Highlight
