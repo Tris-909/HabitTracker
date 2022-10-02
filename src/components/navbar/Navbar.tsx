@@ -21,7 +21,7 @@ export const NavBar = () => {
     <Box
       w="100%"
       bg={"#121010"}
-      h="10vh"
+      h="11vh"
       mb="2rem"
       display="flex"
       justifyContent={"space-between"}

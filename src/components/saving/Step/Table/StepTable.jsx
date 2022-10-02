@@ -127,9 +127,7 @@ export const StepTable = ({ goal }) => {
         cell.value
       );
     } else {
-      return (
-        <Box color={cell.value >= 0 ? "#1df024" : "#f70c30"}>{cell.value}</Box>
-      );
+      return <Box color={cell.value >= 0 ? "#1df024" : "#f70c30"}>{}</Box>;
     }
   };
 
