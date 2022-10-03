@@ -222,6 +222,44 @@ export const useMileStonesStore = create((set, get) => ({
       });
     }
   },
+  fetchMileStonesByGoalId: async ({ goalId }) => {
+    try {
+      const currentMileStoneObj = get().milestones;
+
+      if (goalId in currentMileStoneObj === false) {
+        const queries = query(
+          collection(db, "milestones"),
+          where("parentId", "==", goalId),
+          orderBy("createdAt", "desc")
+        );
+        const { docs } = await getDocs(queries);
+        const milestones = docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const milestonesObj = {
+          ...get().milestones,
+        };
+        milestonesObj[goalId] = milestones;
+
+        set({
+          milestones: milestonesObj,
+        });
+      } else {
+        console.error(
+          "Already fetched milestones based on current goalId",
+          goalId
+        );
+      }
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to create a step, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
 }));
 
 export const useStepStore = create((set, get) => ({

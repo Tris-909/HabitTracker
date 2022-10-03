@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useStepStore } from "state";
+import { useStepStore, useMileStonesStore } from "state";
 import dayjs from "dayjs";
 
 ChartJS.register(
@@ -29,6 +29,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
       )
     : [];
+  const milestones = useMileStonesStore((state) => state.milestones);
 
   const options = {
     responsive: true,
@@ -133,6 +134,23 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     }
   };
 
+  const constuctMileStones = () => {
+    if (milestones[goal?.id]) {
+      const milestonesPosition = milestones[goal.id]
+        .map((milestone: any) => {
+          return {
+            x: milestone.title,
+            y: milestone.amount,
+          };
+        })
+        .sort((a: any, b: any) => a.y > b.y);
+
+      return milestonesPosition;
+    }
+
+    return [];
+  };
+
   const labels: any = constuctLabels();
   const data: any = {
     labels,
@@ -152,6 +170,16 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         backgroundColor: "#f70c30",
         pointRadius: 3,
         ids: constructIds(),
+      },
+      {
+        label: "MileStones",
+        data: constuctMileStones(),
+        borderColor: "#00fae9",
+        backgroundColor: "#00fae9",
+
+        lineBorderColor: "rgba(0, 0, 0, 0)",
+        lineBackgroundColor: "#00fae9",
+        pointRadius: 5,
       },
       {
         label: "Max",

@@ -21,7 +21,12 @@ import {
   HomeBackground,
   CustomSpinner,
 } from "components";
-import { useStore, useGoalStore, useStepStore } from "state";
+import {
+  useStore,
+  useGoalStore,
+  useStepStore,
+  useMileStonesStore,
+} from "state";
 import { MEDIA_QUERY } from "consts";
 
 export const HomePage = () => {
@@ -33,6 +38,9 @@ export const HomePage = () => {
   const fetchUser = useStore((state) => state.fetchUser);
   const fetchAllGoals = useGoalStore((state) => state.fetchAllGoals);
   const fetchStepsByGoalId = useStepStore((state) => state.fetchStepsByGoalId);
+  const fetchMileStonesByGoalId = useMileStonesStore(
+    (state) => state.fetchMileStonesByGoalId
+  );
   const [currentDisplayGoal, setCurrentDisplayGoal] = useState(undefined);
   const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`, {
     ssr: false,
@@ -60,6 +68,7 @@ export const HomePage = () => {
   useEffect(() => {
     if (currentDisplayGoal) {
       fetchStepsByGoalId({ goal: currentDisplayGoal });
+      fetchMileStonesByGoalId({ goalId: currentDisplayGoal.id });
     }
   }, [currentDisplayGoal?.id]);
 
