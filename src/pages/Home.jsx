@@ -20,6 +20,7 @@ import {
   GoalOptions,
   HomeBackground,
   CustomSpinner,
+  ShowMileStones,
 } from "components";
 import {
   useStore,
@@ -145,6 +146,10 @@ export const HomePage = () => {
                       </Box>
 
                       <GoalChart goal={currentDisplayGoal} />
+
+                      <Box>
+                        <ShowMileStones goal={currentDisplayGoal} />
+                      </Box>
                     </>
                   ) : (
                     <Skeleton height="450px" />
