@@ -7,3 +7,4 @@ export * from "./Goal/DeleteGoal";
 export * from "./Goal/EditGoalModal";
 export * from "./Step/CreateStepModal";
 export * from "./Step/Table/StepTable";
+export * from "./Milestones/CreateMileStonesModal";

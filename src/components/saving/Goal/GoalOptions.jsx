@@ -5,6 +5,7 @@ import {
   EditGoalModal,
   DeleteGoal,
   CreateGoalModal,
+  CreateMileStoneModal,
 } from "components";
 
 export const GoalOptions = ({ goal }) => {
@@ -30,6 +31,7 @@ export const GoalOptions = ({ goal }) => {
         <EditGoalModal goal={goal} />
         <DeleteGoal goalId={goal.id} />
         <CreateStepModal goal={goal} />
+        <CreateMileStoneModal goal={goal} />
       </MenuList>
     </Menu>
   );

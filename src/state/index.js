@@ -17,7 +17,6 @@ import dayjs from "dayjs";
 
 export const useStore = create((set, get) => ({
   user: {},
-  // USER
   fetchUser: async (email) => {
     if (!get().user?.id) {
       const queries = query(
@@ -163,6 +162,65 @@ export const useGoalStore = create((set, get) => ({
     set({
       goals: [],
     });
+  },
+}));
+
+export const useMileStonesStore = create((set, get) => ({
+  milestones: {},
+  isLoadingMileStones: false,
+  createMileStone: async ({ user, title, amount, description, goalId }) => {
+    try {
+      console.log("get 0", get().milestones);
+
+      set({
+        isLoadingMileStones: true,
+      });
+
+      const { id, email } = user;
+      const milestone = {
+        title: title,
+        amount: amount,
+        description: description,
+        parentId: goalId,
+        userId: id,
+        createdBy: email,
+        createdAt: serverTimestamp(),
+      };
+      const result = await addDoc(collection(db, "milestones"), milestone);
+
+      milestone.createdAt.seconds = dayjs(dayjs()).unix();
+
+      const mileStoneObj = {
+        ...get().milestones,
+      };
+
+      mileStoneObj[goalId] = [{ id: result.id, ...milestone }];
+
+      if (get().milestones[goalId]) {
+        mileStoneObj[goalId] = [
+          ...mileStoneObj[goalId],
+          ...get().milestones[goalId],
+        ];
+      }
+
+      set({
+        milestones: mileStoneObj,
+        isLoadingMileStones: false,
+      });
+
+      console.log("get", get().milestones);
+
+      notify({
+        notifyMessage: "Created a milestone succesfully.",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to create a step, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
   },
 }));
 
