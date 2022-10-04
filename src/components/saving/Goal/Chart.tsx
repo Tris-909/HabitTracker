@@ -43,12 +43,16 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
       tooltip: {
         callbacks: {
           title: (chart: any) => {
-            const currentDescription =
-              sortedSteps[sortedSteps.length - chart[0].dataIndex]?.description;
-
             if (chart[0].label === "Goal") {
               return "Goal";
             }
+
+            if (chart[0].dataset.label === "MileStones") {
+              return chart[0].label;
+            }
+
+            const currentDescription =
+              sortedSteps[sortedSteps.length - chart[0].dataIndex]?.description;
             return currentDescription ? currentDescription : "Starting Point";
           },
         },
