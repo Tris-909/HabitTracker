@@ -18,6 +18,9 @@ import { FiX } from "react-icons/fi";
 export const ShowMileStones = ({ goal }) => {
   const milestones = useMileStonesStore((state) => state.milestones);
   const goalInfo = useStepStore((state) => state.goalInfo);
+  const deleteMileStoneById = useMileStonesStore(
+    (state) => state.deleteMileStoneById
+  );
 
   const showBadgesBasedOnAmount = ({ milestone }) => {
     const { total } = goalInfo[goal.id];
@@ -34,6 +37,13 @@ export const ShowMileStones = ({ goal }) => {
     } else {
       return <Badge colorScheme="green">{progress}</Badge>;
     }
+  };
+
+  const deleteMileStoneHandler = (milestoneId) => {
+    deleteMileStoneById({
+      goalId: goal.id,
+      milestoneId: milestoneId,
+    });
   };
 
   return (
@@ -77,7 +87,11 @@ export const ShowMileStones = ({ goal }) => {
                       description={milestone.description}
                       title={milestone.title}
                     />
-                    <Icon as={FiX} cursor="pointer" />
+                    <Icon
+                      as={FiX}
+                      cursor="pointer"
+                      onClick={() => deleteMileStoneHandler(milestone.id)}
+                    />
                   </Box>
                 </Box>
 

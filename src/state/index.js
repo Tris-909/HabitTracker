@@ -307,6 +307,34 @@ export const useMileStonesStore = create((set, get) => ({
       });
     }
   },
+  deleteMileStoneById: async ({ goalId, milestoneId }) => {
+    try {
+      const newMileStoneArr = get().milestones[goalId].filter(
+        (milestone) => milestone.id !== milestoneId
+      );
+
+      const milestoneObj = {
+        ...get().milestones,
+      };
+      milestoneObj[goalId] = newMileStoneArr;
+
+      set({
+        milestones: milestoneObj,
+      });
+
+      await deleteDoc(doc(db, "milestones", milestoneId));
+      notify({
+        notifyMessage: "Delete a milestone sucessfully",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to update a milestone, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
 }));
 
 export const useStepStore = create((set, get) => ({
