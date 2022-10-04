@@ -260,6 +260,53 @@ export const useMileStonesStore = create((set, get) => ({
       });
     }
   },
+  editMileStoneById: async ({
+    milestoneId,
+    title,
+    amount,
+    description,
+    goalId,
+  }) => {
+    try {
+      const newMileStoneArr = get().milestones[goalId].map((milestone) => {
+        if (milestone.id === milestoneId) {
+          return {
+            ...milestone,
+            amount: amount,
+            title: title,
+            description: description,
+          };
+        }
+        return milestone;
+      });
+
+      const milestoneObj = {
+        ...get().milestones,
+      };
+      milestoneObj[goalId] = newMileStoneArr;
+
+      set({
+        milestones: milestoneObj,
+      });
+
+      await updateDoc(doc(db, "milestones", milestoneId), {
+        amount: amount,
+        title: title,
+        description: description,
+      });
+
+      notify({
+        notifyMessage: "Update a milestone succesfully.",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to update a milestone, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
 }));
 
 export const useStepStore = create((set, get) => ({

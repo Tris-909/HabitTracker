@@ -9,3 +9,4 @@ export * from "./Step/CreateStepModal";
 export * from "./Step/Table/StepTable";
 export * from "./Milestones/CreateMileStonesModal";
 export * from "./Milestones/ShowMilestones";
+export * from "./Milestones/EditMileStones";

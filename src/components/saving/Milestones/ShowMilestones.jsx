@@ -11,8 +11,9 @@ import {
   Tooltip,
   Icon,
 } from "@chakra-ui/react";
+import { EditMileStone } from "components";
 import { useMileStonesStore, useStepStore } from "state";
-import { FiEdit2, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
 export const ShowMileStones = ({ goal }) => {
   const milestones = useMileStonesStore((state) => state.milestones);
@@ -47,9 +48,9 @@ export const ShowMileStones = ({ goal }) => {
           </AccordionButton>
         </h2>
         <AccordionPanel pb={4}>
-          {milestones &&
+          {goal.id in milestones &&
             milestones[goal.id].map((milestone, index) => (
-              <Box display={"flex"} flexDir="column">
+              <Box display={"flex"} flexDir="column" key={milestone.id}>
                 <Box
                   display={"flex"}
                   mt="1rem"
@@ -57,15 +58,25 @@ export const ShowMileStones = ({ goal }) => {
                   justifyContent={"space-between"}
                 >
                   <Box>
-                    <Heading as="h6" size="xs">
+                    <Heading as="h6" size="md">
                       {milestone.title}
                     </Heading>
                     <Tooltip label={milestone.amount}>
                       {showBadgesBasedOnAmount({ milestone: milestone })}
                     </Tooltip>
                   </Box>
-                  <Box>
-                    <Icon as={FiEdit2} cursor="pointer" /> /{" "}
+                  <Box
+                    display={"flex"}
+                    justifyContent="center"
+                    alignContent={"center"}
+                  >
+                    <EditMileStone
+                      milestoneId={milestone.id}
+                      goalId={goal.id}
+                      amount={milestone.amount}
+                      description={milestone.description}
+                      title={milestone.title}
+                    />
                     <Icon as={FiX} cursor="pointer" />
                   </Box>
                 </Box>

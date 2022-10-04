@@ -25,7 +25,11 @@ export const CreateMileStoneModal = ({ goal }) => {
         isOpen={isOpen}
         onClose={onClose}
         modalForm={
-          <SharedForm actionHandler={actionHandler} onClose={onClose} />
+          <SharedForm
+            actionHandler={actionHandler}
+            onClose={onClose}
+            state={"Create"}
+          />
         }
         modalTitle="Adding MileStone"
       />

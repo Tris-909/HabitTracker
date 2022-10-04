@@ -11,11 +11,20 @@ import {
 } from "@chakra-ui/react";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
 
-export const SharedForm = ({ onClose, actionHandler }) => {
+export const SharedForm = ({
+  onClose,
+  actionHandler,
+  state,
+  existingAmount,
+  existingTitle,
+  existingDescription,
+}) => {
   const ref = useRef(null);
-  const [amount, setAmount] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState(existingAmount ? existingAmount : "");
+  const [title, setTitle] = useState(existingTitle ? existingTitle : "");
+  const [description, setDescription] = useState(
+    existingDescription ? existingDescription : ""
+  );
   const [error, setError] = useState("");
 
   const createHandler = async () => {
@@ -34,6 +43,7 @@ export const SharedForm = ({ onClose, actionHandler }) => {
 
   const resetForm = () => {
     setAmount("0");
+    setTitle("");
     setDescription("");
   };
 
@@ -84,22 +94,11 @@ export const SharedForm = ({ onClose, actionHandler }) => {
           _hover={{
             bg: "#484848",
           }}
-          mr={3}
-          onClick={onClose}
-        >
-          Close
-        </Button>
-        <Button
-          bg="black"
-          color="white"
-          _hover={{
-            bg: "#484848",
-          }}
           onClick={() => {
             createHandler();
           }}
         >
-          Create
+          {state === "Create" ? "Create" : "Edit"}
         </Button>
       </ModalFooter>
     </>
