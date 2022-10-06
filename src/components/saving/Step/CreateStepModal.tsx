@@ -12,7 +12,9 @@ export const CreateStepModal = ({ goal }: { goal: any }) => {
       <SharedModal
         isOpen={isOpen}
         onClose={onClose}
-        modalForm={<CreateStepForm goal={goal} onClose={onClose} />}
+        modalForm={
+          <CreateStepForm goal={goal} onClose={onClose} isCreate={true} />
+        }
         modalTitle="Adding One Step"
       />
     </Box>

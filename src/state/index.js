@@ -452,14 +452,16 @@ export const useStepStore = create((set, get) => ({
       });
     }
   },
-  updateStepId: async ({ stepId, goalId, amount, description }) => {
+  updateStepId: async ({ stepId, goal, amount, description, createdAt }) => {
     try {
+      const goalId = goal.id;
       const newStepsArr = get().steps[goalId].map((step) => {
         if (step.id === stepId) {
           return {
             ...step,
             amount: amount,
             description: description,
+            createdAt: createdAt,
           };
         }
         return step;
@@ -471,7 +473,7 @@ export const useStepStore = create((set, get) => ({
       stepObj[goalId] = newStepsArr;
       get().updateGoalInfo({
         stepObj: stepObj,
-        goalId: goalId,
+        goal: goal,
       });
 
       set({
@@ -481,6 +483,7 @@ export const useStepStore = create((set, get) => ({
       await updateDoc(doc(db, "steps", stepId), {
         amount: amount,
         description: description,
+        createdAt: createdAt,
       });
 
       notify({

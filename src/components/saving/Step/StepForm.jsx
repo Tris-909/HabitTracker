@@ -17,24 +17,40 @@ import {
 } from "components/shared";
 import dayjs from "dayjs";
 
-export const CreateStepForm = ({ goal, onClose }) => {
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+export const CreateStepForm = ({ goal, onClose, step = {}, isCreate }) => {
+  const [amount, setAmount] = useState(step.amount ? step.amount : "");
+  const [description, setDescription] = useState(
+    step.description ? step.description : ""
+  );
+  const [createdAt, setCreatedAt] = useState(
+    step.createdAt ? new Date(step.createdAt * 1000) : new Date()
+  );
   const [error, setError] = useState("");
-  const [createdAt, setCreatedAt] = useState(new Date());
   const ref = useRef(null);
   const user = useStore((state) => state.user);
   const createStep = useStepStore((state) => state.createStep);
+  const updateStepId = useStepStore((state) => state.updateStepId);
 
   const createHandler = async () => {
     if (amount && description && createdAt) {
-      createStep({
-        amount: amount,
-        description: description,
-        goal: goal,
-        createdAt: dayjs(createdAt).unix(),
-        user: user,
-      });
+      if (isCreate) {
+        createStep({
+          amount: amount,
+          description: description,
+          goal: goal,
+          createdAt: dayjs(createdAt).unix(),
+          user: user,
+        });
+      } else {
+        await updateStepId({
+          stepId: step.id,
+          amount,
+          description,
+          goal: goal,
+          createdAt: dayjs(createdAt).unix(),
+        });
+      }
+
       resetForm();
       onClose();
     } else {
@@ -88,22 +104,11 @@ export const CreateStepForm = ({ goal, onClose }) => {
           _hover={{
             bg: "#484848",
           }}
-          mr={3}
-          onClick={onClose}
-        >
-          Close
-        </Button>
-        <Button
-          bg="black"
-          color="white"
-          _hover={{
-            bg: "#484848",
-          }}
           onClick={() => {
             createHandler();
           }}
         >
-          Create
+          {isCreate ? "Create" : "Edit"}
         </Button>
       </ModalFooter>
     </>
