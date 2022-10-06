@@ -1,0 +1,13 @@
+.container {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.react-date-picker__wrapper {
+  border-color: #e2e8f0;
+}
+
+.error {
+  border: 1px solid red;
+}

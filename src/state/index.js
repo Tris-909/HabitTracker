@@ -371,7 +371,7 @@ export const useStepStore = create((set, get) => ({
       goalInfo: goalInfoObj,
     });
   },
-  createStep: async ({ user, amount, description, goal }) => {
+  createStep: async ({ user, amount, description, createdAt, goal }) => {
     try {
       const goalId = goal.id;
       const { id, email } = user;
@@ -381,12 +381,10 @@ export const useStepStore = create((set, get) => ({
         parentId: goalId,
         userId: id,
         createdBy: email,
-        createdAt: serverTimestamp(),
+        createdAt: createdAt,
       };
+      console.log("create step", step);
       const result = await addDoc(collection(db, "steps"), step);
-
-      // Try to get the current date for createdAt locally first since can't find a way to retrieve serverTimestamp without a request
-      step.createdAt.seconds = dayjs(dayjs()).unix();
 
       const stepObj = {
         ...get().steps,
@@ -497,8 +495,9 @@ export const useStepStore = create((set, get) => ({
       });
     }
   },
-  deleteStepById: async ({ stepId, goalId }) => {
+  deleteStepById: async ({ stepId, goal }) => {
     try {
+      const goalId = goal.id;
       const newStepsArr = get().steps[goalId].filter(
         (step) => step.id !== stepId
       );
@@ -509,7 +508,7 @@ export const useStepStore = create((set, get) => ({
       stepObj[goalId] = newStepsArr;
       get().updateGoalInfo({
         stepObj: stepObj,
-        goalId: goalId,
+        goal: goal,
       });
 
       set({

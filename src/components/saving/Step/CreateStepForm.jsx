@@ -11,21 +11,27 @@ import {
 } from "@chakra-ui/react";
 import { useStore, useStepStore } from "state";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
+import DatePicker from "react-date-picker";
+import dayjs from "dayjs";
+import "./DatePicker.css";
 
 export const CreateStepForm = ({ goal, onClose }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+  const [createdAt, setCreatedAt] = useState(new Date());
   const ref = useRef(null);
   const user = useStore((state) => state.user);
   const createStep = useStepStore((state) => state.createStep);
 
   const createHandler = async () => {
-    if (amount && description) {
+    console.log("createdAt", createdAt, dayjs(createdAt).unix());
+    if (amount && description && createdAt) {
       createStep({
         amount: amount,
         description: description,
         goal: goal,
+        createdAt: dayjs(createdAt).unix(),
         user: user,
       });
       resetForm();
@@ -59,7 +65,6 @@ export const CreateStepForm = ({ goal, onClose }) => {
             <FormLabel mt="1rem">Description</FormLabel>
             <EmojiPicker
               text={description}
-              isInvalid={!description && error}
               setText={setDescription}
               cursor={ref}
             />
@@ -69,6 +74,13 @@ export const CreateStepForm = ({ goal, onClose }) => {
             placeholder="Adding some words for yourself"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
+            isInvalid={!description && error}
+          />
+          <DatePicker
+            onChange={setCreatedAt}
+            value={createdAt}
+            required={true}
+            className={["container", "wrapper", createdAt ? "" : "error"]}
           />
           {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </FormControl>

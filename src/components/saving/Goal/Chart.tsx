@@ -25,9 +25,7 @@ ChartJS.register(
 export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
   const steps = useStepStore((state) => state.steps);
   const sortedSteps = steps[goal?.id]
-    ? steps[goal?.id].sort(
-        (a: any, b: any) => a.createdAt.seconds - b.createdAt.seconds
-      )
+    ? steps[goal?.id].sort((a: any, b: any) => a.createdAt - b.createdAt)
     : [];
   const milestones = useMileStonesStore((state) => state.milestones);
 
@@ -63,7 +61,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
   const constuctLabels = () => {
     if (steps) {
       const labels = sortedSteps.map((step: any) => {
-        return dayjs(dayjs.unix(step.createdAt.seconds)).format("DD/MM");
+        return dayjs(dayjs.unix(step.createdAt)).format("DD/MM");
       });
 
       return ["0", ...labels];
@@ -183,7 +181,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
 
         lineBorderColor: "rgba(0, 0, 0, 0)",
         lineBackgroundColor: "#00fae9",
-        pointRadius: 5,
+        pointRadius: 10,
       },
       {
         label: "Max",
@@ -195,7 +193,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         ],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
-        pointRadius: 10,
+        pointRadius: 15,
       },
     ],
   };

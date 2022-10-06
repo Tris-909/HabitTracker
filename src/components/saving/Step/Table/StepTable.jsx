@@ -32,7 +32,7 @@ export const StepTable = ({ goal }) => {
     () => [
       {
         Header: "Date",
-        accessor: "createdAt.seconds",
+        accessor: "createdAt",
       },
       {
         Header: "Amount",
@@ -67,9 +67,7 @@ export const StepTable = ({ goal }) => {
   } = useTable(
     {
       columns: columns,
-      data: stepsForCurrentGoal.sort(
-        (a, b) => b.createdAt.seconds - a.createdAt.seconds
-      ),
+      data: stepsForCurrentGoal.sort((a, b) => b.createdAt - a.createdAt),
       autoResetPage: false,
       autoResetSortBy: false,
       initialState: { pageIndex: 0, pageSize: 3 },
@@ -127,12 +125,14 @@ export const StepTable = ({ goal }) => {
         cell.value
       );
     } else {
-      return <Box color={cell.value >= 0 ? "#1df024" : "#f70c30"}>{}</Box>;
+      return (
+        <Box color={cell.value >= 0 ? "#1df024" : "#f70c30"}>{cell.value}</Box>
+      );
     }
   };
 
   const deleteStepHandler = async (stepId) => {
-    await deleteStepById({ stepId: stepId, goalId: goal?.id });
+    await deleteStepById({ stepId: stepId, goal: goal });
   };
 
   return (

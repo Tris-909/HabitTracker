@@ -74,7 +74,9 @@ export const CreateGoalForm = ({
             type="number"
             value={amount}
             isInvalid={!amount && error.length !== 0}
-            onChange={(event) => setAmount(event.target.value)}
+            onChange={(event) => {
+              setAmount(event.target.value);
+            }}
           />
           <FormLabel>Description</FormLabel>
           <Input
