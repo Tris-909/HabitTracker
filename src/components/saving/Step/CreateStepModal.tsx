@@ -1,6 +1,6 @@
 import { SharedModal } from "components";
 import { Box, useDisclosure, MenuItem } from "@chakra-ui/react";
-import { CreateStepForm } from "./CreateStepForm";
+import { CreateStepForm } from "./StepForm";
 
 export const CreateStepModal = ({ goal }: { goal: any }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
