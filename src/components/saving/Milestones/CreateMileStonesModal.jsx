@@ -6,6 +6,8 @@ export const CreateMileStoneModal = ({ goal }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useStore((state) => state.user);
   const createMileStone = useMileStonesStore((state) => state.createMileStone);
+  const milestones = useMileStonesStore((state) => state.milestones);
+  const currentMilestones = milestones[goal.id];
 
   const actionHandler = ({ amount, description, title, color }) => {
     createMileStone({
@@ -31,6 +33,7 @@ export const CreateMileStoneModal = ({ goal }) => {
             onClose={onClose}
             state={"Create"}
             formName="Milestones"
+            milestones={currentMilestones}
           />
         }
         modalTitle="Adding MileStone"

@@ -177,20 +177,6 @@ export const useMileStonesStore = create((set, get) => ({
     goalId,
   }) => {
     try {
-      // Stop user from creating milestones with amount the same like existing milestones
-      const currentMilestones = get().milestones[goalId];
-      const exitCreateMileStones = currentMilestones.some(
-        (milestone) => Number(milestone.amount) === amount
-      );
-      if (exitCreateMileStones && currentMilestones.length > 0) {
-        notify({
-          notifyMessage:
-            "Can't create a milestone with the same amount as existing milestone",
-          notifyRule: notifyRules.ERROR,
-        });
-        return "";
-      }
-
       set({
         isLoadingMileStones: true,
       });

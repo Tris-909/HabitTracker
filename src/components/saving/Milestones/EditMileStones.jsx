@@ -12,6 +12,8 @@ export const EditMileStone = ({
   color,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const milestones = useMileStonesStore((state) => state.milestones);
+  const currentMilestones = milestones[goalId];
   const editMileStoneById = useMileStonesStore(
     (state) => state.editMileStoneById
   );
@@ -44,6 +46,8 @@ export const EditMileStone = ({
             existingTitle={title}
             existingDescription={description}
             existingColor={color}
+            milestones={currentMilestones}
+            milestoneId={milestoneId}
           />
         }
         modalTitle="Edit Milestone"

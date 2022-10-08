@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
 import { SliderPicker } from "react-color";
+import { notify, notifyRules } from "components";
 
 export const SharedForm = ({
   onClose,
@@ -21,6 +22,8 @@ export const SharedForm = ({
   existingDescription,
   existingColor,
   formName = "",
+  milestones = [],
+  milestoneId = "",
 }) => {
   const ref = useRef(null);
   const [amount, setAmount] = useState(existingAmount ? existingAmount : "");
@@ -32,6 +35,19 @@ export const SharedForm = ({
   const [error, setError] = useState("");
 
   const createHandler = async () => {
+    if (formName === "Milestones") {
+      const exitCreateMileStones = milestones.some((milestone) => {
+        return milestone.amount === amount && milestone.id !== milestoneId;
+      });
+
+      if (exitCreateMileStones && milestones.length > 0) {
+        notify({
+          notifyMessage: `Can't ${state.toLowerCase()} milestone with the same amount as existing milestones`,
+          notifyRule: notifyRules.ERROR,
+        });
+        return "";
+      }
+    }
     if (amount && description && title && color) {
       actionHandler({
         amount: amount,
