@@ -31,24 +31,32 @@ export const SharedForm = ({
   const [description, setDescription] = useState(
     existingDescription ? existingDescription : ""
   );
-  const [color, setColor] = useState(existingColor ? existingColor : "");
+  const [color, setColor] = useState(existingColor ? existingColor : "#000000");
   const [error, setError] = useState("");
 
   const createHandler = async () => {
-    if (formName === "Milestones") {
-      const exitCreateMileStones = milestones.some((milestone) => {
-        return milestone.amount === amount && milestone.id !== milestoneId;
-      });
-
-      if (exitCreateMileStones && milestones.length > 0) {
-        notify({
-          notifyMessage: `Can't ${state.toLowerCase()} milestone with the same amount as existing milestones`,
-          notifyRule: notifyRules.ERROR,
-        });
-        return "";
-      }
-    }
     if (amount && description && title && color) {
+      if (formName === "Milestones") {
+        const exitCreateMileStones = milestones.some((milestone) => {
+          return milestone.amount === amount && milestone.id !== milestoneId;
+        });
+
+        if (exitCreateMileStones && milestones.length > 0) {
+          notify({
+            notifyMessage: `Can't ${state.toLowerCase()} milestone with the same amount as existing milestones`,
+            notifyRule: notifyRules.ERROR,
+          });
+          return "";
+        }
+
+        if (amount <= 0) {
+          setError(
+            `You can't ${state.toLowerCase()} a milestone with negative amount`
+          );
+          return "";
+        }
+      }
+
       actionHandler({
         amount: amount,
         description: description,
@@ -58,7 +66,10 @@ export const SharedForm = ({
       resetForm();
       onClose();
     } else {
-      setError("All fields are required");
+      const errorMessage = `Missing ${title ? "" : "title"} ${
+        amount ? "" : "amount"
+      } ${description ? "" : "description"}`;
+      setError(errorMessage);
     }
   };
 
@@ -80,14 +91,14 @@ export const SharedForm = ({
           <Input
             type="string"
             value={title}
-            isInvalid={!title && error}
+            isInvalid={error.includes("title")}
             onChange={(event) => setTitle(event.target.value)}
           />
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
             value={amount}
-            isInvalid={!amount && error}
+            isInvalid={error.includes("amount")}
             onChange={(event) => setAmount(event.target.value)}
           />
           <Box
@@ -107,6 +118,7 @@ export const SharedForm = ({
             ref={ref}
             placeholder="Adding some words for yourself"
             value={description}
+            isInvalid={error.includes("description")}
             onChange={(event) => setDescription(event.target.value)}
           />
           {formName === "Milestones" && (

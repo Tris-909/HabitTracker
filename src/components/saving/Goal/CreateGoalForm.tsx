@@ -29,6 +29,11 @@ export const CreateGoalForm = ({
 
   const onSubmitHandler = async () => {
     if (title && amount && description) {
+      if (amount <= 0) {
+        setError("amount can't be negative");
+        return "";
+      }
+
       if (state === "Create") {
         createGoal({
           user: user,
@@ -36,6 +41,9 @@ export const CreateGoalForm = ({
           amount: +amount,
           description: description,
         });
+
+        onClose();
+        resetForm();
       } else {
         editGoal({
           goalId: goal?.id,
@@ -43,12 +51,15 @@ export const CreateGoalForm = ({
           amount: +amount,
           description: description,
         });
-      }
 
-      onClose();
-      resetForm();
+        onClose();
+        resetForm();
+      }
     } else {
-      setError("All fields are required");
+      const errorMessage = `Missing ${title ? "" : "title"} ${
+        amount ? "" : "amount"
+      } ${description ? "" : "description"}`;
+      setError(errorMessage);
     }
   };
 
@@ -66,14 +77,14 @@ export const CreateGoalForm = ({
           <Input
             type="string"
             value={title}
-            isInvalid={!title && error.length !== 0}
+            isInvalid={error.includes("title")}
             onChange={(event) => setTitle(event.target.value)}
           />
           <FormLabel>Amount</FormLabel>
           <Input
             type="number"
             value={amount}
-            isInvalid={!amount && error.length !== 0}
+            isInvalid={error.includes("amount")}
             onChange={(event) => {
               setAmount(event.target.value);
             }}
@@ -82,7 +93,7 @@ export const CreateGoalForm = ({
           <Input
             type="string"
             value={description}
-            isInvalid={!description && error.length !== 0}
+            isInvalid={error.includes("description")}
             onChange={(event) => setDescription(event.target.value)}
           />
           {error && <FormErrorMessage>{error}</FormErrorMessage>}
