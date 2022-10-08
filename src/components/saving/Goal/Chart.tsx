@@ -89,6 +89,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
       return newLabel;
     }
   };
+  const currentLabels = constuctLabels();
 
   const constructDataV2 = (type: string) => {
     if (steps) {
@@ -160,7 +161,6 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
 
   const constuctMileStones = () => {
     if (milestones[goal?.id]) {
-      const currentLabels = constuctLabels();
       const milestonesPosition = milestones[goal.id]
         .map((milestone: any) => {
           return {
@@ -224,7 +224,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         label: "Max",
         data: [
           {
-            x: "Goal",
+            x: currentLabels![currentLabels!.length - 1],
             y: goal.goal,
           },
         ],

@@ -14,6 +14,6 @@
 - [x] Re-confirming user want to delete the milestone
 - [x] Can't create more than 5 milestones each goal
 - [x] Adding crossover for milestones and check icon if milestones progress >= 100%
-- [] Stop user from creating goal with negative amount, milestones with negative amount
-- [] Testing to see what if totalAmount === goal
+- [x] Stop user from creating goal with negative amount, milestones with negative amount
+- [x] Testing to see what if totalAmount === goal
 - [] Adding currency ( optional ) for goal and show it in the chart, only allow length of 3, can edit / remove it if wanted
