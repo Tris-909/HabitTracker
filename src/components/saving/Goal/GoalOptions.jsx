@@ -1,4 +1,3 @@
-import { FiChevronDown } from "react-icons/fi";
 import { Menu, MenuButton, MenuList, IconButton } from "@chakra-ui/react";
 import {
   CreateStepModal,
@@ -7,24 +6,27 @@ import {
   CreateGoalModal,
   CreateMileStoneModal,
 } from "components";
+import { FiSettings } from "react-icons/fi";
 
 export const GoalOptions = ({ goal }) => {
   return (
     <Menu>
       <MenuButton
         as={IconButton}
-        icon={<FiChevronDown />}
+        icon={<FiSettings />}
         color="black"
         bg="white"
+        transition="transform 1s ease-in-out"
         _hover={{
           bg: "white",
           color: "black",
+          transform: "rotate(180deg)",
         }}
         _active={{
           bg: "white",
           color: "black",
         }}
-        fontSize="30px"
+        fontSize="25px"
       />
       <MenuList>
         <CreateGoalModal state="AlreadyHasGoal" />
