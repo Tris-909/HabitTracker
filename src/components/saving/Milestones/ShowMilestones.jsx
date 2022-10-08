@@ -9,9 +9,11 @@ import {
   Heading,
   Badge,
   Tooltip,
+  Icon,
 } from "@chakra-ui/react";
 import { EditMileStone, DeleteMilestoneModal } from "components";
 import { useMileStonesStore, useStepStore } from "state";
+import { FiCheck } from "react-icons/fi";
 
 export const ShowMileStones = ({ goal }) => {
   const milestones = useMileStonesStore((state) => state.milestones);
@@ -31,6 +33,38 @@ export const ShowMileStones = ({ goal }) => {
       return <Badge colorScheme="yellow">{progress}%</Badge>;
     } else {
       return <Badge colorScheme="green">{progress}%</Badge>;
+    }
+  };
+
+  const showCrossOver = ({ milestone }) => {
+    const { total } = goalInfo[goal.id];
+    const progress =
+      Math.round((total / (milestone.amount * 1)) * 100 * 10) / 10;
+
+    if (progress >= 100) {
+      return "line-through";
+    } else {
+      return "inherit";
+    }
+  };
+
+  const showIcon = ({ milestone }) => {
+    const { total } = goalInfo[goal.id];
+    const progress =
+      Math.round((total / (milestone.amount * 1)) * 100 * 10) / 10;
+
+    if (progress >= 100) {
+      return (
+        <Icon
+          as={FiCheck}
+          width="1.25rem"
+          height="1.25rem"
+          ml="1rem"
+          color="green"
+        />
+      );
+    } else {
+      return null;
     }
   };
 
@@ -56,8 +90,15 @@ export const ShowMileStones = ({ goal }) => {
                   justifyContent={"space-between"}
                 >
                   <Box>
-                    <Heading as="h6" size="md">
+                    <Heading
+                      as="h6"
+                      size="md"
+                      textDecoration={() =>
+                        showCrossOver({ milestone: milestone })
+                      }
+                    >
                       {milestone.title}
+                      {showIcon({ milestone: milestone })}
                     </Heading>
                     <Tooltip label={milestone.amount}>
                       {showBadgesBasedOnAmount({ milestone: milestone })}
@@ -76,10 +117,7 @@ export const ShowMileStones = ({ goal }) => {
                       title={milestone.title}
                       color={milestone.color}
                     />
-                    <DeleteMilestoneModal
-                      milestone={milestone}
-                      goal={goal}
-                    />
+                    <DeleteMilestoneModal milestone={milestone} goal={goal} />
                   </Box>
                 </Box>
 
