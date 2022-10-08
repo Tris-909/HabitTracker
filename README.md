@@ -10,7 +10,8 @@
 - [x] Fixing 0 position incorrectly
 - [x] Edit milestones allow to choose color
 - [x] Stop user from edit a milestone amount to an existing amount from other milestones
-- [] Re-confirming user want to delete the milestone
+- [x] Unique labels for chart
+- [x] Re-confirming user want to delete the milestone
 - [] Can't create more than 10 milestones each goal
 - [] Adding crossover for milestones and check icon if milestones progress >= 100%
 - [] Stop user from creating goal with negative amount, milestones with negative amount

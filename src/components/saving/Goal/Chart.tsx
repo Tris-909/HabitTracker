@@ -218,7 +218,6 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         data: constuctMileStones(),
         borderColor: constructMileStonesBackgrounds(),
         backgroundColor: constructMileStonesBackgrounds(),
-        pointRadius: 4,
       },
       {
         type: "line" as const,

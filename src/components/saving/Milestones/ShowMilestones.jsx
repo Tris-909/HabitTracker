@@ -9,18 +9,13 @@ import {
   Heading,
   Badge,
   Tooltip,
-  Icon,
 } from "@chakra-ui/react";
-import { EditMileStone } from "components";
+import { EditMileStone, DeleteMilestoneModal } from "components";
 import { useMileStonesStore, useStepStore } from "state";
-import { FiX } from "react-icons/fi";
 
 export const ShowMileStones = ({ goal }) => {
   const milestones = useMileStonesStore((state) => state.milestones);
   const goalInfo = useStepStore((state) => state.goalInfo);
-  const deleteMileStoneById = useMileStonesStore(
-    (state) => state.deleteMileStoneById
-  );
 
   const showBadgesBasedOnAmount = ({ milestone }) => {
     const { total } = goalInfo[goal.id];
@@ -37,13 +32,6 @@ export const ShowMileStones = ({ goal }) => {
     } else {
       return <Badge colorScheme="green">{progress}%</Badge>;
     }
-  };
-
-  const deleteMileStoneHandler = (milestoneId) => {
-    deleteMileStoneById({
-      goalId: goal.id,
-      milestoneId: milestoneId,
-    });
   };
 
   return (
@@ -88,10 +76,9 @@ export const ShowMileStones = ({ goal }) => {
                       title={milestone.title}
                       color={milestone.color}
                     />
-                    <Icon
-                      as={FiX}
-                      cursor="pointer"
-                      onClick={() => deleteMileStoneHandler(milestone.id)}
+                    <DeleteMilestoneModal
+                      milestone={milestone}
+                      goal={goal}
                     />
                   </Box>
                 </Box>
