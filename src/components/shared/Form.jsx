@@ -10,6 +10,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { EmojiPicker, TextAreaWithRef } from "components/shared";
+import { SliderPicker } from "react-color";
 
 export const SharedForm = ({
   onClose,
@@ -18,6 +19,8 @@ export const SharedForm = ({
   existingAmount,
   existingTitle,
   existingDescription,
+  existingColor,
+  formName = "",
 }) => {
   const ref = useRef(null);
   const [amount, setAmount] = useState(existingAmount ? existingAmount : "");
@@ -25,14 +28,16 @@ export const SharedForm = ({
   const [description, setDescription] = useState(
     existingDescription ? existingDescription : ""
   );
+  const [color, setColor] = useState(existingColor ? existingColor : "");
   const [error, setError] = useState("");
 
   const createHandler = async () => {
-    if (amount && description && title) {
+    if (amount && description && title && color) {
       actionHandler({
         amount: amount,
         description: description,
         title: title,
+        color: color,
       });
       resetForm();
       onClose();
@@ -45,6 +50,10 @@ export const SharedForm = ({
     setAmount("0");
     setTitle("");
     setDescription("");
+  };
+
+  const handleChangeComplete = (color) => {
+    setColor(color.hex);
   };
 
   return (
@@ -84,6 +93,25 @@ export const SharedForm = ({
             value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
+          {formName === "Milestones" && (
+            <>
+              <Box
+                mt="1rem"
+                mb="0.5rem"
+                display={"flex"}
+                justifyContent="start"
+                alignItems="start"
+              >
+                <FormLabel>Color</FormLabel>
+                <Box width="3rem" height="1.5rem" ml="0.5rem" bgColor={color} />
+              </Box>
+
+              <SliderPicker
+                color={color}
+                onChangeComplete={handleChangeComplete}
+              />
+            </>
+          )}
           {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </FormControl>
       </ModalBody>

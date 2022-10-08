@@ -24,7 +24,6 @@ export const ShowMileStones = ({ goal }) => {
 
   const showBadgesBasedOnAmount = ({ milestone }) => {
     const { total } = goalInfo[goal.id];
-    console.log("total", total);
     const decideFactor = total / (milestone.amount * 1);
     const progress =
       Math.round((total / (milestone.amount * 1)) * 100 * 10) / 10;

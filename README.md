@@ -1,2 +1,16 @@
 # HabitTracker
+
 --placeholder--
+
+# TODO
+
+- [x] Prevent users to create milestones with existing amount
+- [x] Allow users to choose color for the milestone when creating it
+- [] Hide milestones dropdown when there are no milestones
+- [] Fixing 0 position incorrectly
+- [] Edit milestones allow to choose color
+- [] Can't create more than 10 milestones each goal
+- [] Adding crossover for milestones and check icon if milestones progress >= 100%
+- [] Stop user from creating goal with negative amount, milestones with negative amount
+- [] Testing to see what if totalAmount === goal
+- [] Adding currency ( optional ) for goal and show it in the chart, only allow length of 3, can edit / remove it if wanted

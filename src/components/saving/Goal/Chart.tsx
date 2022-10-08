@@ -3,18 +3,20 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
+  BarElement,
   LineElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import { useStepStore, useMileStonesStore } from "state";
 import dayjs from "dayjs";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  BarElement,
   PointElement,
   LineElement,
   Title,
@@ -138,16 +140,17 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
 
   const constuctMileStones = () => {
     if (milestones[goal?.id]) {
+      const currentLabels = constuctLabels();
       const milestonesPosition = milestones[goal.id]
         .map((milestone: any) => {
           return {
-            x: milestone.title,
+            x: currentLabels![currentLabels!.length - 1],
             y: milestone.amount,
           };
         })
         .sort((a: any, b: any) => a.y > b.y);
 
-      return milestonesPosition;
+      return milestonesPosition.reverse();
     }
 
     return [];
@@ -158,6 +161,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     labels,
     datasets: [
       {
+        type: "line" as const,
         label: "Earn",
         data: constructDataV2("Earn"),
         borderColor: "#1df024",
@@ -166,6 +170,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         ids: constructIds(),
       },
       {
+        type: "line" as const,
         label: "Loss",
         data: constructDataV2("Loss"),
         borderColor: "#f70c30",
@@ -174,15 +179,17 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         ids: constructIds(),
       },
       {
+        type: "bar" as const,
         label: "MileStones",
         data: constuctMileStones(),
         borderColor: "#00fae9",
-        backgroundColor: "#00fae9",
+        backgroundColor: ["#00fae9", "blue"],
         lineBorderColor: "rgba(0, 0, 0, 0)",
         lineBackgroundColor: "#00fae9",
-        pointRadius: 10,
+        pointRadius: 4,
       },
       {
+        type: "line" as const,
         label: "Max",
         data: [
           {
@@ -197,5 +204,5 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     ],
   };
 
-  return <Line options={options} data={data} />;
+  return <Chart type="bar" options={options} data={data} />;
 };

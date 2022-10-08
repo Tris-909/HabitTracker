@@ -10,7 +10,7 @@ export const notifyRules = {
     icon: "🚨",
   },
   ERROR: {
-    duration: 3500,
+    duration: 4000,
     position: "bottom-right",
     style: {
       borderRadius: "10px",

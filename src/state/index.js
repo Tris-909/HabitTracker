@@ -168,9 +168,30 @@ export const useGoalStore = create((set, get) => ({
 export const useMileStonesStore = create((set, get) => ({
   milestones: {},
   isLoadingMileStones: false,
-  createMileStone: async ({ user, title, amount, description, goalId }) => {
+  createMileStone: async ({
+    user,
+    title,
+    amount,
+    description,
+    color,
+    goalId,
+  }) => {
     try {
-      console.log("get 0", get().milestones);
+      // Stop user from creating milestones with amount the same like existing milestones
+      const currentMilestones = get().milestones[goalId];
+      const exitCreateMileStones = currentMilestones.filter((milestone) => {
+        if (Number(milestone.amount) === amount) {
+          return true;
+        }
+      });
+      if (exitCreateMileStones && currentMilestones.length > 0) {
+        notify({
+          notifyMessage:
+            "Can't create a milestone with the same amount as existing milestone",
+          notifyRule: notifyRules.ERROR,
+        });
+        return "";
+      }
 
       set({
         isLoadingMileStones: true,
@@ -182,6 +203,7 @@ export const useMileStonesStore = create((set, get) => ({
         amount: amount,
         description: description,
         parentId: goalId,
+        color: color,
         userId: id,
         createdBy: email,
         createdAt: serverTimestamp(),
@@ -207,8 +229,6 @@ export const useMileStonesStore = create((set, get) => ({
         milestones: mileStoneObj,
         isLoadingMileStones: false,
       });
-
-      console.log("get", get().milestones);
 
       notify({
         notifyMessage: "Created a milestone succesfully.",
@@ -383,7 +403,6 @@ export const useStepStore = create((set, get) => ({
         createdBy: email,
         createdAt: createdAt,
       };
-      console.log("create step", step);
       const result = await addDoc(collection(db, "steps"), step);
 
       const stepObj = {
