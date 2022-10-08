@@ -62,11 +62,31 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
 
   const constuctLabels = () => {
     if (steps) {
-      const labels = sortedSteps.map((step: any) => {
-        return dayjs(dayjs.unix(step.createdAt)).format("DD/MM");
+      let increment = 0;
+      const labels = sortedSteps.map((step: any, index: number) => {
+        const dateNTime = dayjs(dayjs.unix(step.createdAt)).format("DD/MM");
+
+        if (index > 0 && index < sortedSteps.length) {
+          const dateNTimePlus =
+            index !== sortedSteps.length - 1 &&
+            dayjs(dayjs.unix(sortedSteps[index + 1].createdAt)).format("DD/MM");
+
+          const dateNTimeMinus = dayjs(
+            dayjs.unix(sortedSteps[index - 1].createdAt)
+          ).format("DD/MM");
+
+          if (dateNTime === dateNTimePlus || dateNTime === dateNTimeMinus) {
+            increment++;
+            return `${dateNTime} [${increment - 1}]`;
+          }
+        }
+
+        return dateNTime;
       });
 
-      return ["Start", ...labels];
+      const newLabel = ["Start", ...labels];
+
+      return newLabel;
     }
   };
 
