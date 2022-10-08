@@ -26,6 +26,7 @@ import { LongStepDescriptionModal } from "../LongStepDescriptionModal";
 import { EditStepModal } from "../EditStepModal";
 import { TableFooterButton } from "./TableFooterButton";
 import { MEDIA_QUERY } from "consts";
+import { formatNumber } from "utils";
 
 export const StepTable = ({ goal }) => {
   const columns = useMemo(
@@ -126,7 +127,9 @@ export const StepTable = ({ goal }) => {
       );
     } else {
       return (
-        <Box color={cell.value >= 0 ? "#1df024" : "#f70c30"}>{cell.value}</Box>
+        <Box color={cell.value >= 0 ? "#1df024" : "#f70c30"}>
+          {formatNumber(cell.value)}
+        </Box>
       );
     }
   };

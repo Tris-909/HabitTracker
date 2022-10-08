@@ -17,3 +17,4 @@
 - [x] Stop user from creating goal with negative amount, milestones with negative amount
 - [x] Testing to see what if totalAmount === goal
 - [] Adding currency ( optional ) for goal and show it in the chart, only allow length of 3, can edit / remove it if wanted
+- [] Fixing creating new goal bug

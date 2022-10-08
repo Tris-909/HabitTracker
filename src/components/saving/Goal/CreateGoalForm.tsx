@@ -7,6 +7,7 @@ import {
   ModalBody,
   ModalFooter,
   FormErrorMessage,
+  Box,
 } from "@chakra-ui/react";
 import { useStore, useGoalStore } from "state";
 
@@ -22,6 +23,7 @@ export const CreateGoalForm = ({
   const [title, setTitle] = useState(goal?.title);
   const [amount, setAmount] = useState(goal?.goal);
   const [description, setDescription] = useState(goal?.description);
+  const [currency, setCurrency] = useState(goal?.currency);
   const [error, setError] = useState("");
   const user = useStore((state) => state.user);
   const createGoal = useGoalStore((state) => state.createGoal);
@@ -40,6 +42,7 @@ export const CreateGoalForm = ({
           title: title,
           amount: +amount,
           description: description,
+          currency: currency,
         });
 
         onClose();
@@ -50,6 +53,7 @@ export const CreateGoalForm = ({
           title: title,
           amount: +amount,
           description: description,
+          currency: currency,
         });
 
         onClose();
@@ -80,16 +84,36 @@ export const CreateGoalForm = ({
             isInvalid={error.includes("title")}
             onChange={(event) => setTitle(event.target.value)}
           />
-          <FormLabel>Amount</FormLabel>
-          <Input
-            type="number"
-            value={amount}
-            isInvalid={error.includes("amount")}
-            onChange={(event) => {
-              setAmount(event.target.value);
-            }}
-          />
-          <FormLabel>Description</FormLabel>
+          <Box display={"flex"} mt="1rem">
+            <Box w="45%" mr="1rem">
+              <FormLabel>Amount</FormLabel>
+              <Input
+                type="number"
+                value={amount}
+                isInvalid={error.includes("amount")}
+                onChange={(event) => {
+                  setAmount(event.target.value);
+                }}
+              />
+            </Box>
+            <Box w="50%">
+              <FormLabel>Currency (optional)</FormLabel>
+              <Input
+                type="string"
+                w="65px"
+                value={currency}
+                onChange={(event) => {
+                  const newValue = event.target.value;
+
+                  if (newValue.length <= 3) {
+                    setCurrency(newValue);
+                  }
+                }}
+              />
+            </Box>
+          </Box>
+
+          <FormLabel mt="1rem">Description</FormLabel>
           <Input
             type="string"
             value={description}

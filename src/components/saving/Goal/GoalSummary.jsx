@@ -2,6 +2,7 @@ import { Box, Heading, Highlight, useMediaQuery } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { useStepStore } from "state";
 import { MEDIA_QUERY } from "consts";
+import { formatNumber } from "utils";
 
 export const GoalSummary = ({ goal }) => {
   const goalInfo = useStepStore((state) => state.goalInfo);
@@ -26,7 +27,8 @@ export const GoalSummary = ({ goal }) => {
         >
           Goal:
         </Highlight>
-        {` `} {goal?.goal}
+        {` `} {formatNumber(goal?.goal.toString())}{" "}
+        {goal?.currency ? goal.currency : null}
       </Heading>
       <Heading as="h4" size="sm" mb="1rem">
         <Highlight
@@ -35,7 +37,8 @@ export const GoalSummary = ({ goal }) => {
         >
           Current:
         </Highlight>
-        {` `} {goalInfo[goal.id]?.total}
+        {` `} {formatNumber(goalInfo[goal.id]?.total.toString())}{" "}
+        {goal?.currency ? goal.currency : null}
       </Heading>
       <Heading as="h4" size="sm" mb="1rem">
         <Highlight

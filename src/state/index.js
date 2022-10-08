@@ -49,7 +49,7 @@ export const useStore = create((set, get) => ({
 export const useGoalStore = create((set, get) => ({
   goals: [],
   isLoadingGoal: true,
-  createGoal: async ({ user, title, amount, description }) => {
+  createGoal: async ({ user, title, amount, description, currency }) => {
     const { id, email } = user;
     const goal = {
       title: title,
@@ -58,6 +58,7 @@ export const useGoalStore = create((set, get) => ({
       description: description,
       parentId: id,
       userId: id,
+      currency: currency,
       createdBy: email,
       createdAt: serverTimestamp(),
     };
@@ -103,13 +104,14 @@ export const useGoalStore = create((set, get) => ({
       });
     }
   },
-  editGoal: async ({ title, amount, description, goalId }) => {
+  editGoal: async ({ title, amount, description, currency, goalId }) => {
     try {
       const newGoalArr = get().goals.map((goal) => {
         if (goal.id === goalId) {
           return {
             ...goal,
             title: title,
+            currency: currency,
             goal: amount,
             description: description,
           };
@@ -125,6 +127,7 @@ export const useGoalStore = create((set, get) => ({
       await updateDoc(doc(db, "goals", goalId), {
         title: title,
         goal: amount,
+        currency: currency,
         description: description,
       });
 
