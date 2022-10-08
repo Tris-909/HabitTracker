@@ -66,7 +66,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         return dayjs(dayjs.unix(step.createdAt)).format("DD/MM");
       });
 
-      return ["0", ...labels];
+      return ["Start", ...labels];
     }
   };
 
@@ -156,6 +156,20 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     return [];
   };
 
+  const constructMileStonesBackgrounds = () => {
+    if (milestones[goal?.id]) {
+      const milestoneColor = milestones[goal.id]
+        .map((milestone: any) => {
+          return milestone.color;
+        })
+        .sort((a: any, b: any) => a.y > b.y);
+
+      return milestoneColor;
+    }
+
+    return [];
+  };
+
   const labels: any = constuctLabels();
   const data: any = {
     labels,
@@ -182,10 +196,8 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         type: "bar" as const,
         label: "MileStones",
         data: constuctMileStones(),
-        borderColor: "#00fae9",
-        backgroundColor: ["#00fae9", "blue"],
-        lineBorderColor: "rgba(0, 0, 0, 0)",
-        lineBackgroundColor: "#00fae9",
+        borderColor: constructMileStonesBackgrounds(),
+        backgroundColor: constructMileStonesBackgrounds(),
         pointRadius: 4,
       },
       {

@@ -150,9 +150,10 @@ export const HomePage = () => {
                       <GoalChart goal={currentDisplayGoal} />
 
                       <Box>
-                        {currentMileStoneRelatedToGoal.length > 0 && (
-                          <ShowMileStones goal={currentDisplayGoal} />
-                        )}
+                        {currentMileStoneRelatedToGoal &&
+                          currentMileStoneRelatedToGoal.length > 0 && (
+                            <ShowMileStones goal={currentDisplayGoal} />
+                          )}
                       </Box>
                     </>
                   ) : (

@@ -86,6 +86,7 @@ export const ShowMileStones = ({ goal }) => {
                       amount={milestone.amount}
                       description={milestone.description}
                       title={milestone.title}
+                      color={milestone.color}
                     />
                     <Icon
                       as={FiX}

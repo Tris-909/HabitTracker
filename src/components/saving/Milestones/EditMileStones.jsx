@@ -9,19 +9,21 @@ export const EditMileStone = ({
   amount,
   description,
   title,
+  color,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const editMileStoneById = useMileStonesStore(
     (state) => state.editMileStoneById
   );
 
-  const actionHandler = ({ amount, description, title }) => {
+  const actionHandler = ({ amount, description, title, color }) => {
     editMileStoneById({
       milestoneId,
       title,
       amount,
       description,
       goalId,
+      color,
     });
   };
 
@@ -37,12 +39,14 @@ export const EditMileStone = ({
             actionHandler={actionHandler}
             onClose={onClose}
             state={"Edit"}
+            formName="Milestones"
             existingAmount={amount}
             existingTitle={title}
             existingDescription={description}
+            existingColor={color}
           />
         }
-        modalTitle="Edit Goal"
+        modalTitle="Edit Milestone"
       />
     </>
   );

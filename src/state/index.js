@@ -179,11 +179,9 @@ export const useMileStonesStore = create((set, get) => ({
     try {
       // Stop user from creating milestones with amount the same like existing milestones
       const currentMilestones = get().milestones[goalId];
-      const exitCreateMileStones = currentMilestones.filter((milestone) => {
-        if (Number(milestone.amount) === amount) {
-          return true;
-        }
-      });
+      const exitCreateMileStones = currentMilestones.some(
+        (milestone) => Number(milestone.amount) === amount
+      );
       if (exitCreateMileStones && currentMilestones.length > 0) {
         notify({
           notifyMessage:
@@ -286,6 +284,7 @@ export const useMileStonesStore = create((set, get) => ({
     amount,
     description,
     goalId,
+    color,
   }) => {
     try {
       const newMileStoneArr = get().milestones[goalId].map((milestone) => {
@@ -295,6 +294,7 @@ export const useMileStonesStore = create((set, get) => ({
             amount: amount,
             title: title,
             description: description,
+            color: color,
           };
         }
         return milestone;
@@ -313,6 +313,7 @@ export const useMileStonesStore = create((set, get) => ({
         amount: amount,
         title: title,
         description: description,
+        color: color,
       });
 
       notify({
