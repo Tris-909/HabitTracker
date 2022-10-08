@@ -35,6 +35,7 @@ export const HomePage = () => {
   const user = useStore((state) => state.user);
   const goals = useGoalStore((state) => state.goals);
   const goalInfo = useStepStore((state) => state.goalInfo);
+  const milestones = useMileStonesStore((state) => state.milestones);
   const isLoadingGoal = useGoalStore((state) => state.isLoadingGoal);
   const fetchUser = useStore((state) => state.fetchUser);
   const fetchAllGoals = useGoalStore((state) => state.fetchAllGoals);
@@ -43,6 +44,7 @@ export const HomePage = () => {
     (state) => state.fetchMileStonesByGoalId
   );
   const [currentDisplayGoal, setCurrentDisplayGoal] = useState(undefined);
+  const currentMileStoneRelatedToGoal = milestones[currentDisplayGoal?.id];
   const [isDesktop] = useMediaQuery(`(min-width: ${MEDIA_QUERY.DESKTOP})`, {
     ssr: false,
   });
@@ -148,7 +150,9 @@ export const HomePage = () => {
                       <GoalChart goal={currentDisplayGoal} />
 
                       <Box>
-                        <ShowMileStones goal={currentDisplayGoal} />
+                        {currentMileStoneRelatedToGoal.length > 0 && (
+                          <ShowMileStones goal={currentDisplayGoal} />
+                        )}
                       </Box>
                     </>
                   ) : (
