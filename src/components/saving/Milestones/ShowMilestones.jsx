@@ -24,18 +24,19 @@ export const ShowMileStones = ({ goal }) => {
 
   const showBadgesBasedOnAmount = ({ milestone }) => {
     const { total } = goalInfo[goal.id];
-    const decideFactor = (milestone.amount * 1) / total;
+    console.log("total", total);
+    const decideFactor = total / (milestone.amount * 1);
     const progress =
-      Math.round(((milestone.amount * 1) / total) * 100 * 10) / 10;
+      Math.round((total / (milestone.amount * 1)) * 100 * 10) / 10;
 
     if (total === 0) {
       return <Badge colorScheme="red">0%</Badge>;
     } else if (decideFactor <= 0.5) {
-      return <Badge colorScheme="red">{progress}</Badge>;
+      return <Badge colorScheme="red">{progress}%</Badge>;
     } else if (decideFactor > 0.5 && decideFactor < 0.8) {
-      return <Badge colorScheme="yellow">{progress}</Badge>;
+      return <Badge colorScheme="yellow">{progress}%</Badge>;
     } else {
-      return <Badge colorScheme="green">{progress}</Badge>;
+      return <Badge colorScheme="green">{progress}%</Badge>;
     }
   };
 

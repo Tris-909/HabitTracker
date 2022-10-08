@@ -178,7 +178,6 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         data: constuctMileStones(),
         borderColor: "#00fae9",
         backgroundColor: "#00fae9",
-
         lineBorderColor: "rgba(0, 0, 0, 0)",
         lineBackgroundColor: "#00fae9",
         pointRadius: 10,
