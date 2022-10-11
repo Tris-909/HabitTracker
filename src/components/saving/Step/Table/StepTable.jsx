@@ -146,6 +146,7 @@ export const StepTable = ({ goal }) => {
           bg="white"
           fontSize={"3xl"}
           borderBottom="1px solid black"
+          borderTopRadius="1rem"
           mt="0"
           pt="0"
           placement="top"
@@ -186,6 +187,7 @@ export const StepTable = ({ goal }) => {
         justifyContent="center"
         alignItems="center"
         position="relative"
+        borderBottomRadius="1rem"
       >
         {isDesktop ? (
           <Box position="absolute" right="2%">

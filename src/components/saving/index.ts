@@ -11,3 +11,4 @@ export * from "./Milestones/CreateMileStonesModal";
 export * from "./Milestones/ShowMilestones";
 export * from "./Milestones/EditMileStones";
 export * from "./Milestones/DeleteMileStone";
+export * from "./Note/NoteBoard";

@@ -1,6 +1,6 @@
 # Saving Goal
 
-# To-Dd List
+# To-Do List
 
 - [x] Prevent users to create milestones with existing amount
 - [x] Allow users to choose color for the milestone when creating it
@@ -15,3 +15,6 @@
 - [x] Stop user from creating goal with negative amount, milestones with negative amount
 - [x] Testing to see what if totalAmount === goal
 - [x] Adding currency ( optional ) for goal and show it in the chart, only allow length of 3, can edit / remove it if wanted
+- [] Table Note drag n drop
+- [] Editable Note on open modal
+- [] Deploying app online

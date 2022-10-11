@@ -21,6 +21,7 @@ import {
   HomeBackground,
   CustomSpinner,
   ShowMileStones,
+  NoteBoard,
 } from "components";
 import {
   useStore,
@@ -96,7 +97,12 @@ export const HomePage = () => {
           <CustomSpinner />
         ) : goals.length > 0 ? (
           <>
-            <Box bg="white" w={isDesktop ? "40%" : "90%"} height="fit-content">
+            <Box
+              bg="white"
+              w={isDesktop ? "45%" : "90%"}
+              borderTopRadius="1rem"
+              height="fit-content"
+            >
               <Tabs>
                 <TabList>
                   {goals.map((goal) => {
@@ -164,6 +170,7 @@ export const HomePage = () => {
             </Box>
             <Box w={isDesktop ? "50%" : "90%"} mt={isDesktop ? "0rem" : "2rem"}>
               <StepTable goal={currentDisplayGoal} />
+              <NoteBoard goal={currentDisplayGoal} />
             </Box>
           </>
         ) : (

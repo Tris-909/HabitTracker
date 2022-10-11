@@ -547,3 +547,124 @@ export const useStepStore = create((set, get) => ({
     });
   },
 }));
+
+export const useNoteStore = create((set, get) => ({
+  notes: {},
+  createNote: async ({ user, goalId }) => {
+    try {
+      const { id, email } = user;
+      const note = {
+        x: 0,
+        y: 0,
+        description: "",
+        parentId: goalId,
+        userId: id,
+        createdBy: email,
+        createdAt: serverTimestamp(),
+      };
+      const result = await addDoc(collection(db, "notes"), note);
+
+      note.createdAt.seconds = dayjs(dayjs()).unix();
+
+      const notesObj = {
+        ...get().milestones,
+      };
+
+      notesObj[goalId] = [{ id: result.id, ...notesObj }];
+
+      if (get().notes[goalId]) {
+        notesObj[goalId] = [...notesObj[goalId], ...get().milestones[goalId]];
+      }
+
+      set({
+        notes: notesObj,
+      });
+
+      notify({
+        notifyMessage: "Created a note succesfully.",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to create a note, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
+  fetchNotesByGoalId: async ({ goalId }) => {
+    try {
+      const currentNoteObj = get().notes;
+
+      if (goalId in currentNoteObj === false) {
+        const queries = query(
+          collection(db, "notes"),
+          where("parentId", "==", goalId),
+          orderBy("createdAt", "desc")
+        );
+        const { docs } = await getDocs(queries);
+        const notes = docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const noteObj = {
+          ...get().notes,
+        };
+        noteObj[goalId] = notes;
+
+        set({
+          notes: noteObj,
+        });
+      } else {
+        console.error("Already fetched current notes for goalId");
+      }
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage:
+          "Failed to fetch all notes related to this goal, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
+  updateNotePositionByGoalId: async ({ goalId, x, y, noteId }) => {
+    try {
+      const notes = get().notes[goalId];
+
+      const newNotes = notes.map((note) => {
+        if (note.id === noteId) {
+          return {
+            ...note,
+            x: x,
+            y: y,
+          };
+        } else {
+          return {
+            ...note,
+          };
+        }
+      });
+
+      const noteObj = {
+        ...get().notes,
+      };
+      noteObj[goalId] = newNotes;
+
+      set({
+        notes: noteObj,
+      });
+
+      await updateDoc(doc(db, "notes", noteId), {
+        x: x,
+        y: y,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to update a note, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
+}));
