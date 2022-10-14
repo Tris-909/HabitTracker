@@ -5,6 +5,7 @@ import {
   PointElement,
   BarElement,
   LineElement,
+  LineController,
   Title,
   Tooltip,
   Legend,
@@ -19,6 +20,7 @@ ChartJS.register(
   BarElement,
   PointElement,
   LineElement,
+  LineController,
   Title,
   Tooltip,
   Legend
@@ -195,7 +197,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     labels,
     datasets: [
       {
-        type: "line" as const,
+        type: "line",
         label: "Earn",
         data: constructDataV2("Earn"),
         borderColor: "#1df024",
@@ -204,7 +206,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         ids: constructIds(),
       },
       {
-        type: "line" as const,
+        type: "line",
         label: "Loss",
         data: constructDataV2("Loss"),
         borderColor: "#f70c30",
@@ -220,7 +222,7 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
         backgroundColor: constructMileStonesBackgrounds(),
       },
       {
-        type: "line" as const,
+        type: "line",
         label: "Max",
         data: [
           {

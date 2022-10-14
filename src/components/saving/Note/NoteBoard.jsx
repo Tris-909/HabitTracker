@@ -63,7 +63,7 @@ export const NoteBoard = ({ goal }) => {
       />
       {currentNotesByGoal &&
         currentNotesByGoal.map((note) => {
-          return <Note note={note} />;
+          return <Note note={note} key={note.id} />;
         })}
     </Box>
   );

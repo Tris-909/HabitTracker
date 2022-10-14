@@ -17,4 +17,4 @@
 - [x] Adding currency ( optional ) for goal and show it in the chart, only allow length of 3, can edit / remove it if wanted
 - [x] Table Note drag n drop
 - [x] Editable Note on open modal
-- [] Deploying app online
+- [x] Deploying app online [https://cute-seahorse-5d3a81.netlify.app/]
