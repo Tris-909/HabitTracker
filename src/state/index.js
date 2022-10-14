@@ -567,13 +567,13 @@ export const useNoteStore = create((set, get) => ({
       note.createdAt.seconds = dayjs(dayjs()).unix();
 
       const notesObj = {
-        ...get().milestones,
+        ...get().notes,
       };
 
-      notesObj[goalId] = [{ id: result.id, ...notesObj }];
+      notesObj[goalId] = [{ id: result.id, ...note }];
 
       if (get().notes[goalId]) {
-        notesObj[goalId] = [...notesObj[goalId], ...get().milestones[goalId]];
+        notesObj[goalId] = [...notesObj[goalId], ...get().notes[goalId]];
       }
 
       set({
@@ -631,7 +631,6 @@ export const useNoteStore = create((set, get) => ({
   updateNoteByGoalId: async ({ goalId, x, y, description, noteId }) => {
     try {
       const notes = get().notes[goalId];
-
       const newNotes = notes.map((note) => {
         if (note.id === noteId) {
           return {

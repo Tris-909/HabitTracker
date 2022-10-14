@@ -15,6 +15,6 @@
 - [x] Stop user from creating goal with negative amount, milestones with negative amount
 - [x] Testing to see what if totalAmount === goal
 - [x] Adding currency ( optional ) for goal and show it in the chart, only allow length of 3, can edit / remove it if wanted
-- [] Table Note drag n drop
-- [] Editable Note on open modal
+- [x] Table Note drag n drop
+- [x] Editable Note on open modal
 - [] Deploying app online
