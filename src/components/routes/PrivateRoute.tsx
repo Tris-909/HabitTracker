@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAuthState } from "initialization/firebase";
+import { useAuthState } from "initialize/firebase";
 
 type PrivateRouteProps = {
   component: JSX.Element;

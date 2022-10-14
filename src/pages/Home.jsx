@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuthState } from "initialization/firebase";
+import { useAuthState } from "initialize/firebase";
 import {
   Box,
   Tabs,

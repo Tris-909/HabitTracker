@@ -3,7 +3,7 @@ import { AuthPage, HomePage } from "./pages";
 import { PrivateRoute } from "components/routes/PrivateRoute";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Toaster } from "react-hot-toast";
-import { AuthContextProvider } from "initialization/firebase";
+import { AuthContextProvider } from "initialize/firebase";
 import { extendTheme } from "@chakra-ui/react";
 import dayjs from "dayjs";
 dayjs().format();
