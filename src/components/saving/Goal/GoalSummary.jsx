@@ -47,8 +47,9 @@ export const GoalSummary = ({ goal }) => {
         >
           Loss:
         </Highlight>
+        {formatNumber(goalInfo[goal.id]?.loss.toString())}
         {` `}
-        {goalInfo[goal.id]?.loss}
+        {goal?.currency ? goal.currency : null}
       </Heading>
       <Heading as="h4" size="sm">
         <Highlight
