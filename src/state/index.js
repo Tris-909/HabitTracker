@@ -535,7 +535,7 @@ export const useStepStore = create((set, get) => ({
     } catch (error) {
       console.error("ERROR", error.message);
       notify({
-        notifyMessage: "Failed to update a step, please try again.",
+        notifyMessage: "Failed to delete a step, please try again.",
         notifyRule: notifyRules.ERROR,
       });
     }
@@ -628,7 +628,7 @@ export const useNoteStore = create((set, get) => ({
       });
     }
   },
-  updateNotePositionByGoalId: async ({ goalId, x, y, noteId }) => {
+  updateNoteByGoalId: async ({ goalId, x, y, description, noteId }) => {
     try {
       const notes = get().notes[goalId];
 
@@ -638,6 +638,7 @@ export const useNoteStore = create((set, get) => ({
             ...note,
             x: x,
             y: y,
+            description: description,
           };
         } else {
           return {
@@ -658,11 +659,40 @@ export const useNoteStore = create((set, get) => ({
       await updateDoc(doc(db, "notes", noteId), {
         x: x,
         y: y,
+        description: description,
       });
     } catch (error) {
       console.error("ERROR", error.message);
       notify({
         notifyMessage: "Failed to update a note, please try again.",
+        notifyRule: notifyRules.ERROR,
+      });
+    }
+  },
+  deleteNoteByGoalId: async ({ goalId, noteId }) => {
+    try {
+      const newNotesArr = get().notes[goalId].filter(
+        (note) => note.id !== noteId
+      );
+
+      const notesObj = {
+        ...get().notes,
+      };
+      notesObj[goalId] = newNotesArr;
+
+      set({
+        notes: notesObj,
+      });
+
+      await deleteDoc(doc(db, "notes", noteId));
+      notify({
+        notifyMessage: "Delete a note sucessfully",
+        notifyRule: notifyRules.SUCCESS,
+      });
+    } catch (error) {
+      console.error("ERROR", error.message);
+      notify({
+        notifyMessage: "Failed to delete a note, please try again.",
         notifyRule: notifyRules.ERROR,
       });
     }

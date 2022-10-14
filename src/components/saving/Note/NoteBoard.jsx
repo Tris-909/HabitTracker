@@ -11,11 +11,11 @@ export const NoteBoard = ({ goal }) => {
   const createNote = useNoteStore((state) => state.createNote);
   const fetchNotesByGoalId = useNoteStore((state) => state.fetchNotesByGoalId);
 
-  // useEffect(() => {
-  //   if (goal?.id) {
-  //     fetchNotesByGoalId({ goalId: goal?.id });
-  //   }
-  // }, [goal?.id]);
+  useEffect(() => {
+    if (goal?.id) {
+      fetchNotesByGoalId({ goalId: goal?.id });
+    }
+  }, [goal?.id]);
 
   const createNoteHandler = () => {
     createNote({ user: user, goalId: goal.id });
@@ -61,8 +61,8 @@ export const NoteBoard = ({ goal }) => {
         position={"absolute"}
         onClick={() => createNoteHandler()}
       />
-      {testNotes &&
-        testNotes.map((note) => {
+      {currentNotesByGoal &&
+        currentNotesByGoal.map((note) => {
           return <Note note={note} />;
         })}
     </Box>
