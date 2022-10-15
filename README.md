@@ -1,5 +1,21 @@
 # Saving Goal
 
+A responsive saving app that will show you graph about your current saving amount, your goal.
+
+You can also add meaningful description to each of your step and drag-n-drop notes about the current saving goal.
+
+![Project Image](./src/assets/pic3.PNG)
+
+# Stacks
+
+- React
+- Firebase for authentication, cloudFireStore for databases
+- Chakra-UI
+- JavaScript and TypeScript
+- Zustand for state management
+- Git version control
+- Netlify for deployment
+
 # To-Do List
 
 - [x] Prevent users to create milestones with existing amount
