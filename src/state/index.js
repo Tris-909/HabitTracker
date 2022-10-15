@@ -24,7 +24,11 @@ export const useStore = create((set, get) => ({
         where("email", "==", email)
       );
       const { docs } = await getDocs(queries);
-      const currentUser = { id: docs[0].id, ...docs[0]?.data() };
+
+      let currentUser;
+      if (docs.length > 0) {
+        currentUser = { id: docs[0].id, ...docs[0]?.data() };
+      }
 
       // Create user in cloudstore the first time they log-in
       if (!currentUser?.id) {
@@ -63,6 +67,7 @@ export const useGoalStore = create((set, get) => ({
       createdAt: serverTimestamp(),
     };
     const result = await addDoc(collection(db, "goals"), goal);
+    goal.createdAt.seconds = dayjs(dayjs()).unix();
 
     set({
       goals: [...get().goals, { id: result.id, ...goal }],

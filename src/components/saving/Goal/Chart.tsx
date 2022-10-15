@@ -95,66 +95,18 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
   };
   const currentLabels = constuctLabels();
 
-  const constructDataV2 = (type: string) => {
+  const constructData = () => {
     if (steps) {
+      let total = 0;
       const amountArray = sortedSteps.map((step: any, index: number) => {
-        if (type === "Earn") {
-          const nextStepOfEarn = sortedSteps[index + 1]?.amount;
-          if (nextStepOfEarn && Math.sign(nextStepOfEarn) === 1) {
-            const currentArr = sortedSteps.slice(0, index + 1);
-            const currentTotalAmount = currentArr.reduce(
-              (total: number, step: any) => {
-                return (total += step.amount * 1);
-              },
-              0
-            );
-            return currentTotalAmount;
-          }
-
-          if (Math.sign(step.amount) === -1) {
-            return null;
-          }
-          const currentArr = sortedSteps.slice(0, index + 1);
-          const currentTotalAmount = currentArr.reduce(
-            (total: number, step: any) => {
-              return (total += step?.amount * 1);
-            },
-            0
-          );
-
-          return currentTotalAmount;
-        } else {
-          const nextStepOfLoss = sortedSteps[index + 1]?.amount;
-          if (nextStepOfLoss && Math.sign(nextStepOfLoss) === -1) {
-            const currentArr = sortedSteps.slice(0, index + 1);
-            const currentTotalAmount = currentArr.reduce(
-              (total: number, step: any) => {
-                return (total += step.amount * 1);
-              },
-              0
-            );
-            return currentTotalAmount;
-          }
-
-          if (Math.sign(step.amount) === 1) {
-            return null;
-          }
-
-          const currentArr = sortedSteps.slice(0, index + 1);
-          const currentTotalAmount = currentArr.reduce(
-            (total: number, step: any) => {
-              return (total += step.amount * 1);
-            },
-            0
-          );
-
-          return currentTotalAmount;
-        }
+        total += step.amount * 1;
+        return total;
       });
 
       return [0, ...amountArray];
     }
   };
+
   const constructIds = () => {
     if (steps) {
       const stepIds = sortedSteps.map((step: any) => step.id);
@@ -194,27 +146,29 @@ export const GoalChart = ({ goal }: { goal: any; setProgress: any }) => {
     return [];
   };
 
+  // up & down to compare current y value of a line element to the next one
+  // link for help : https://www.youtube.com/watch?v=st2O-pvhWM4
+  const up = (ctx: any, value: any) =>
+    ctx.p0.parsed.y < ctx.p1.parsed.y ? value : undefined;
+
+  const down = (ctx: any, value: any) =>
+    ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+
   const labels: any = constuctLabels();
   const data: any = {
     labels,
     datasets: [
       {
         type: "line",
-        label: "Earn",
-        data: constructDataV2("Earn"),
-        borderColor: "#1df024",
-        backgroundColor: "#1df024",
+        label: "Data",
+        data: constructData(),
         pointRadius: 3,
         ids: constructIds(),
-      },
-      {
-        type: "line",
-        label: "Loss",
-        data: constructDataV2("Loss"),
-        borderColor: "#f70c30",
-        backgroundColor: "#f70c30",
-        pointRadius: 3,
-        ids: constructIds(),
+        segment: {
+          borderColor: (ctx: any) => up(ctx, "#1df024") || down(ctx, "#f70c30"),
+          backgroundColor: (ctx: any) =>
+            up(ctx, "#1df024") || down(ctx, "#f70c30"),
+        },
       },
       {
         type: "bar" as const,
