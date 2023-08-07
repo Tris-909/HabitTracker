@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore";
 import { useState, useEffect, createContext, useContext } from "react";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBEZHV13wmxGokJoKOHTOkm2cWUo_lIn20",
-  authDomain: "habittracker-abc92.firebaseapp.com",
-  projectId: "habittracker-abc92",
-  storageBucket: "habittracker-abc92.appspot.com",
-  messagingSenderId: "726213096111",
-  appId: "1:726213096111:web:2b0d038574813ef6079a5a",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSENGER_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
 export const firebase = initializeApp(firebaseConfig);
